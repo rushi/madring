@@ -1,0 +1,39 @@
+NOTICE
+
+This is an unofficial fan project. It has no affiliation with, and is not
+endorsed or sponsored by, Formula 1, the FIA, or any other rights holder.
+F1-related names and marks belong to their respective owners.
+
+Map data
+--------
+The track outline in content/geometry.json is traced from "Madring (2026).svg"
+by GabrielStella, hosted on Wikimedia Commons:
+
+  https://commons.wikimedia.org/wiki/File:Madring_(2026).svg
+
+That file is licensed under the Creative Commons Attribution-ShareAlike 3.0
+Unported license (CC BY-SA 3.0):
+
+  https://creativecommons.org/licenses/by-sa/3.0/
+
+The traced geometry is a derivative of that work and is distributed under the
+same license. The MIT license covering the source code does not extend to it.
+
+Circuit facts
+-------------
+Corner names, incidents, gradients and speeds are authored content. Each one is
+listed with its origin in content/sources.json. Speeds are a promoter
+projection for a circuit that has not yet been raced, not a measured record.
+
+Fonts
+-----
+Anybody (public/fonts/anybody-sign.woff2)
+Copyright 2020 The Anybody Project Authors
+https://github.com/Etcetera-Type-Co/Anybody
+
+Archivo (public/fonts/archivo-text.woff2)
+Copyright 2020 The Archivo Project Authors
+https://github.com/Omnibus-Type/Archivo
+
+Both are licensed under the SIL Open Font License, Version 1.1.
+Full text: public/fonts/OFL.txt
