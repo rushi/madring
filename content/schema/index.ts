@@ -190,7 +190,10 @@ export const layerGroupSchema = z.object({
 
 export const layersFileSchema = z.object({ schemaVersion: version, groups: z.array(layerGroupSchema).min(1) });
 export const copyFileSchema = z.object({ schemaVersion: version, copy: z.record(z.string(), z.string()) });
-export const sourcesFileSchema = z.object({ schemaVersion: version, sources: z.array(z.string()).min(1) });
+/** Each source carries the link it came from, so the panel can send a reader to it. */
+const sourceSchema = z.object({ url: z.url(), label: z.string().min(1) });
+
+export const sourcesFileSchema = z.object({ schemaVersion: version, sources: z.array(sourceSchema).min(1) });
 
 export const geometryFileSchema = z.object({
     schemaVersion: version,

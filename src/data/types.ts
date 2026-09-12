@@ -37,7 +37,7 @@ export interface CircuitData {
     layout: Record<string, number | string>;
     layerGroups: LayerGroup[];
     copy: Record<string, string>;
-    sources: string[];
+    sources: Source[];
     facts: CircuitFacts;
 }
 
@@ -50,3 +50,9 @@ export interface NamedRun {
 export type Copy = Record<string, string>;
 /** Which map layers are on. Every layer in content has an entry, so a lookup is never a guess. */
 export type LayerState = Record<string, boolean>;
+
+/** One line of the provenance panel: where a circuit fact came from, and the page it came from. */
+export interface Source {
+    url: string;
+    label: string;
+}

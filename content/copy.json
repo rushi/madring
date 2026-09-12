@@ -20,7 +20,7 @@
     "turn.left": "LEFT",
     "turn.right": "RIGHT",
     "turn.banked": "BANKED",
-    "provenance.prefix": "Data last ingested",
+    "provenance.prefix": "Inspiration & Sources",
     "provenance.sources": "Sources",
     "units.metric": "KM",
     "units.imperial": "MI",

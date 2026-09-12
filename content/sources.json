@@ -1,15 +1,49 @@
 {
   "schemaVersion": 1,
   "sources": [
-    "madring.com/en/circuit",
-    "formula1.com circuit guide 2026-09-10",
-    "racingcircuits.info",
-    "above.guide/madrid-f1/circuit",
-    "@sarahonthegrid turn-by-turn",
-    "racingnews365 danger zones",
-    "motorsportweek FIA straight-mode",
-    "motorbiscuit.com — Madring sees 19 crashes in F3 test (per-corner incident log)",
-    "grandepremio.com — F3 test records 19 red flags on new Madrid circuit (per-corner incident log)",
-    "the-race.com — Why F1's new Madrid track is a car killer"
+    {
+      "label": "Madrid Ring, official circuit page",
+      "url": "https://madring.com/en/circuit"
+    },
+    {
+      "label": "Formula 1, circuit guide",
+      "url": "https://www.formula1.com/en/racing/2026/madrid"
+    },
+    {
+      "label": "Racing Circuits, Madring",
+      "url": "https://www.racingcircuits.info/europe/spain/madring.html"
+    },
+    {
+      "label": "Above the Guide, Madrid circuit",
+      "url": "https://above.guide/madrid-f1/circuit"
+    },
+    {
+      "label": "Chequered, F1 companion app",
+      "url": "https://apps.apple.com/in/app/chequered/id6759821353"
+    },
+    {
+      "label": "Sarah on the Grid on Threads",
+      "url": "https://www.threads.com/@sarahonthegrid"
+    },
+    {
+      "label": "RacingNews365, danger zones",
+      "url": "https://racingnews365.com/"
+    },
+    {
+      "label": "Motorsport Week, FIA straight mode",
+      "url": "https://www.motorsportweek.com/"
+    },
+    {
+      "label": "MotorBiscuit, 19 crashes in the F3 test",
+      "url": "https://www.motorbiscuit.com/"
+    },
+    {
+      "label": "Grande Premio, 19 red flags on the new Madrid circuit",
+      "url": "https://www.grandepremio.com.br/"
+    },
+    {
+      "label": "The Race, why the new Madrid track is a car killer",
+      "url": "https://www.the-race.com/"
+    }
   ]
 }
