@@ -322,12 +322,12 @@ function OverlayShell(props: OverlayProps) {
             <div className="stage" data-dock={showDock || undefined}>
                 <div inert={!!sheet || undefined} className="map-frame">
                     <CircuitMap
+                        minPan={floatCard}
                         data={circuit}
                         state={state}
                         units={units}
                         selected={turn}
                         kin={kin}
-                        minPan={floatCard}
                         reservePx={panFrame ? sheetPx : 0}
                         focusTurn={panFrame ? turn : undefined}
                         onSelect={onSelect}

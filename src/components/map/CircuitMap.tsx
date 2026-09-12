@@ -202,12 +202,14 @@ function frameOrigin(args: OriginArgs) {
         return { x: ox, y: oy };
     }
 
+    const fold = box.height - reservePx;
+    /* The lowest line still clear of the card: what fires a pan, and where a min pan puts the corner. */
+    const clear = fold - FOLD_MARGIN;
     /* `meet` letterboxes the frame inside the box on the axis the fit did not bind. */
     const lift = (box.height - frameH * scale) / 2;
-    const fold = box.height - reservePx;
     const at = screenPoint(focus.x, focus.y, cx, cy, mapDeg);
     const screenY = lift + (at.y - oy) * scale;
-    if (screenY <= fold - FOLD_MARGIN) {
+    if (screenY <= clear) {
         return { x: ox, y: oy };
     }
 
@@ -218,7 +220,7 @@ function frameOrigin(args: OriginArgs) {
     const max = lapBottom - frameH * LAP_KEEP;
     /* A card that covers a band rather than the stage moves the lap the least it can: the corner
        lands just clear of the card's top edge instead of under the middle of what is left. */
-    const target = minPan ? fold - FOLD_MARGIN : fold * FOLD_TARGET;
+    const target = minPan ? clear : fold * FOLD_TARGET;
     const y = Math.min(Math.max(at.y - (target - lift) / scale, min), max);
 
     return { x: ox, y };
@@ -251,14 +253,14 @@ interface OriginArgs {
 }
 
 interface Props {
+    /** Move only far enough to clear the reserve, for a card that covers a band and not the stage. */
+    minPan?: boolean;
     data: CircuitData;
     state: LayerState;
     units: Units;
     selected?: number;
     /** The other corners of the selected corner's named sequence. */
     kin: Set<number>;
-    /** Move only far enough to clear the reserve, for a card that covers a band and not the stage. */
-    minPan?: boolean;
     /** Screen px the sheet reserves at the frame's bottom edge. Zero keeps the lap centred. */
     reservePx?: number;
     /** The corner the sheet describes; the frame slides to keep it above the fold. */
