@@ -285,7 +285,8 @@ function OverlayShell(props: OverlayProps) {
         return () => globalThis.removeEventListener("keydown", close);
     }, [sheet, detail, onCloseSheet, onSelect]);
 
-    /* The frame slides the lap clear of the sheet, so it has to know how tall the sheet grew. */
+    /* The frame slides the lap clear of the sheet, so it has to know how much bottom the sheet took. */
+    const frameRef = useRef<HTMLDivElement>(null);
     const sheetRef = useRef<HTMLDivElement>(null);
     const [sheetPx, setSheetPx] = useState(0);
     /*
@@ -294,17 +295,25 @@ function OverlayShell(props: OverlayProps) {
      * against the sheet's own slide. The arrival animates transform alone, so the height is final.
      */
     useLayoutEffect(() => {
+        const frameEl = frameRef.current;
         const sheetEl = sheetRef.current;
-        if (!panFrame || !sheetEl) {
+        if (!panFrame || !frameEl || !sheetEl) {
             setSheetPx(0);
             return;
         }
 
-        /* Border box, not the entry's content box: the sheet's safe-area padding is coverable too. */
-        const measure = () => setSheetPx(Math.round(sheetEl.getBoundingClientRect().height));
+        /* The gap down to the sheet's top edge, not the sheet's own height: the tablet's card floats
+           clear of the bottom, and that margin covers the lap too. The map fills the frame, so the
+           frame's rect is the box `frameOrigin` divides. */
+        const measure = () => {
+            const gap = frameEl.getBoundingClientRect().bottom - sheetEl.getBoundingClientRect().top;
+            setSheetPx(Math.round(Math.max(0, gap)));
+        };
         measure();
 
+        /* Both, because the gap moves when the frame resizes under a sheet whose own height held. */
         const observer = new ResizeObserver(measure);
+        observer.observe(frameEl);
         observer.observe(sheetEl);
         return () => observer.disconnect();
     }, [panFrame]);
@@ -320,7 +329,7 @@ function OverlayShell(props: OverlayProps) {
                 onMenu={() => onOpenSheet("menu")}
             />
             <div className="stage" data-dock={showDock || undefined}>
-                <div inert={!!sheet || undefined} className="map-frame">
+                <div ref={frameRef} inert={!!sheet || undefined} className="map-frame">
                     <CircuitMap
                         minPan={floatCard}
                         data={circuit}
