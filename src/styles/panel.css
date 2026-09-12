@@ -262,6 +262,13 @@
         }
     }
 
+    /* Motion-sensitive: the drawer still announces itself, just without the travel. */
+    @media (prefers-reduced-motion: reduce) {
+        .panel {
+            animation-name: fade-in;
+        }
+    }
+
     .switches {
         display: flex;
         flex-direction: column;

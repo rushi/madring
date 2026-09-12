@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { ProvenanceStamp } from "./components/chrome/ProvenanceStamp.tsx";
 import { ThemeToggle } from "./components/chrome/ThemeToggle.tsx";
@@ -103,21 +103,45 @@ function Shell({ circuit }: { circuit: CircuitData }) {
     /* Below the wide breakpoint the panel is a drawer over the map, not a column beside it. */
     const overlay = useMediaQuery(`(max-width: ${PANEL_OVERLAY_MAX}px)`);
     const drawer = overlay && panelOpen;
+    const showSheet = overlay && !!card;
 
+    /* Drawer and sheet both answer Escape; the drawer is on top, so it wins the key. */
     useEffect(() => {
-        if (!drawer) {
+        if (!drawer && !showSheet) {
             return;
         }
 
         const close = (event: KeyboardEvent) => {
-            if (event.key === "Escape") {
+            if (event.key !== "Escape") {
+                return;
+            }
+
+            if (drawer) {
                 togglePanel();
+            } else {
+                selectTurn(undefined);
             }
         };
 
         globalThis.addEventListener("keydown", close);
         return () => globalThis.removeEventListener("keydown", close);
-    }, [drawer, togglePanel]);
+    }, [drawer, showSheet, togglePanel, selectTurn]);
+
+    /* The frame slides the lap clear of the sheet, so it has to know how tall the sheet grew. */
+    const sheetRef = useRef<HTMLDivElement>(null);
+    const [sheetPx, setSheetPx] = useState(0);
+    useEffect(() => {
+        const sheet = sheetRef.current;
+        if (!showSheet || !sheet) {
+            setSheetPx(0);
+            return;
+        }
+
+        /* Border box, not the entry's content box: the sheet's safe-area padding is coverable too. */
+        const observer = new ResizeObserver(() => setSheetPx(Math.round(sheet.getBoundingClientRect().height)));
+        observer.observe(sheet);
+        return () => observer.disconnect();
+    }, [showSheet]);
 
     useUrlSync(known);
 
@@ -158,7 +182,7 @@ function Shell({ circuit }: { circuit: CircuitData }) {
                     id="layer-panel"
                     aria-label={circuit.copy["layers.label"]}
                     aria-modal={drawer || undefined}
-                    role={drawer ? "dialog" : undefined}
+                    role={drawer ? "dialog" : "region"}
                     className="panel"
                 >
                     {!overlay && card}
@@ -188,17 +212,24 @@ function Shell({ circuit }: { circuit: CircuitData }) {
                 {/*
                  * The corner opens beside the map on a wide screen and over it on a narrow one. It
                  * cannot live in the panel there: the panel arrives closed on a phone, so tapping a
-                 * badge set the selection and rendered its card inside a hidden container.
+                 * badge set the selection and rendered its card inside a hidden container. The map
+                 * pans to keep the corner it describes above the sheet.
                  */}
-                {overlay && card && <div className="detail-sheet">{card}</div>}
+                {showSheet && (
+                    <div ref={sheetRef} className="detail-sheet">
+                        {card}
+                    </div>
+                )}
 
-                <div className="map-frame">
+                <div inert={drawer || undefined} className="map-frame">
                     <CircuitMap
                         data={circuit}
                         state={state}
                         units={units}
                         selected={turn}
                         kin={kin}
+                        reservePx={showSheet ? sheetPx : 0}
+                        focusTurn={showSheet ? turn : undefined}
                         onSelect={selectTurn}
                     />
                 </div>

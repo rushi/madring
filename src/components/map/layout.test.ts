@@ -91,4 +91,12 @@ describe("what the solver could not place", () => {
         const placed = placeLabels([{ ...box("a", 100, 100), optional: true }], bounds);
         expect(placed.has("a")).toBe(true);
     });
+
+    /* The sheet's pan slides the frame: a corner it carries off the map keeps no badge on it. */
+    it("drops a label whose anchor has left the frame, mandatory or not", () => {
+        const bounds = { x0: 0, y0: 0, x1: 120, y1: 120 };
+        const placed = placeLabels([box("a", 400, 100), box("b", 100, 100)], bounds);
+        expect(placed.has("a")).toBe(false);
+        expect(placed.has("b")).toBe(true);
+    });
 });

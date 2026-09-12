@@ -4,7 +4,8 @@ import { speedRun, turnDirection } from "../../data/format.ts";
 import type { Units } from "../../data/format.ts";
 import type { Copy, Layer, Turn } from "../../data/types.ts";
 import { highlightsAtTurn } from "../../layers/resolve.ts";
-import type { Spot } from "./layout.ts";
+import { contains } from "./layout.ts";
+import type { Rect, Spot } from "./layout.ts";
 import { dyeVar, screenLabel } from "./place.ts";
 import type { TurnPoint } from "./points.ts";
 import { badgeRing, LABEL_PX, NOTE_H, noteId, noteWidth, plateId, TAG_OFFSET, TAG_R } from "./ticks.ts";
@@ -12,7 +13,7 @@ import { badgeRing, LABEL_PX, NOTE_H, noteId, noteWidth, plateId, TAG_OFFSET, TA
 /** Paper between one claim's arc and the next, so two dyes never touch on the ring. */
 const RING_GAP = 2.5;
 
-/** Screen-px radius of the bare target a cut badge leaves behind. Comfortably past the 44px floor. */
+/** Screen-px radius of a corner's tap target, badge or no badge. Comfortably past the 44px floor. */
 const HIT_R = 22;
 
 /** Shared empty claims, so an unclaimed corner keeps one stable reference across renders. */
@@ -33,7 +34,7 @@ export interface TickLabels {
  */
 export const TurnTicks = memo(function TurnTicks(props: Props) {
     const { mapDeg, scale, compact, copy, units, labels } = props;
-    const { points, turns, lit, placed, selected, kin, onSelect, onHover } = props;
+    const { points, turns, lit, placed, selected, kin, bounds, onSelect, onHover } = props;
     const counter = 1 / scale;
 
     /* One array per turn, rebuilt only when the lit layers change. Built inline, it was a new
@@ -60,6 +61,7 @@ export const TurnTicks = memo(function TurnTicks(props: Props) {
                     badge={placed.get(plateId(turn.n))}
                     note={noteFor(turn, labels, units)}
                     notePlate={placed.get(noteId(turn.n))}
+                    inFrame={!bounds || inRect(points.get(turn.n), bounds)}
                     onSelect={onSelect}
                     onHover={onHover}
                 />
@@ -71,7 +73,7 @@ export const TurnTicks = memo(function TurnTicks(props: Props) {
 /** Memoised per turn: selecting one badge must not re-render the other 21. */
 const Tick = memo(function Tick(props: TickProps) {
     const { tag, selected, kin, compact, mapDeg, counter } = props;
-    const { claims, copy, turn, point, badge, note, notePlate, onSelect, onHover } = props;
+    const { claims, copy, turn, point, badge, note, notePlate, inFrame, onSelect, onHover } = props;
     if (!point) {
         return null;
     }
@@ -96,8 +98,13 @@ const Tick = memo(function Tick(props: TickProps) {
      * A corner whose badge lost its spot on a crowded map still has to be reachable: the badges are
      * the only route to corner data, so cutting one silently would put that corner out of reach of
      * a keyboard entirely. It keeps a target on the corner itself, invisible until focused.
+     * Off the frame there is no corner to point at, so it keeps nothing.
      */
     if (!badge) {
+        if (inFrame === false) {
+            return null;
+        }
+
         return (
             <g className={tickClass(selected, kin)}>
                 <circle
@@ -105,6 +112,7 @@ const Tick = memo(function Tick(props: TickProps) {
                     tabIndex={0}
                     aria-label={badgeLabel(turn, copy)}
                     aria-current={selected}
+                    data-turn={turn.n}
                     className="tick-hit"
                     cx={x}
                     cy={y}
@@ -133,6 +141,7 @@ const Tick = memo(function Tick(props: TickProps) {
                 tabIndex={0}
                 aria-label={badgeLabel(turn, copy)}
                 aria-current={selected}
+                data-turn={turn.n}
                 transform={screenLabel(badge.x, badge.y, counter, mapDeg)}
                 className="tick-badge"
                 onClick={pick}
@@ -140,6 +149,9 @@ const Tick = memo(function Tick(props: TickProps) {
                 onPointerEnter={enter}
                 onPointerLeave={leave}
             >
+                {/* The finger's target is wider than the badge it carries. First child, so the
+                 * ring and numeral paint over it; a transparent fill still takes the pointer. */}
+                <circle className="badge-hit" r={HIT_R} />
                 <Ring claims={claims} compact={compact} />
                 <circle className="badge-face" r={ring.face} />
                 <text className="badge-numeral" dy="0.34em">
@@ -215,6 +227,9 @@ function badgeLabel(turn: Turn, copy: Copy) {
     return turn.name ? `${prefix}, ${turn.name}, ${direction}` : `${prefix}, ${direction}`;
 }
 
+/** Whether the corner's point sits inside the visible frame. Undefined point reads as outside. */
+const inRect = (point: TurnPoint | undefined, bounds: Rect) => !!point && contains(bounds, point.x, point.y);
+
 /** Selected is the corner you asked for; kin are the rest of the sequence it belongs to. */
 function tickClass(selected: boolean, kin: boolean) {
     if (selected) {
@@ -238,6 +253,8 @@ interface TickProps {
     badge?: Spot;
     note?: string;
     notePlate?: Spot;
+    /** False when the sheet's pan carried this corner off the map. */
+    inFrame?: boolean;
     onSelect: (turn: number) => void;
     onHover: (turn?: number) => void;
 }
@@ -255,6 +272,8 @@ interface Props {
     scale: number;
     selected?: number;
     kin: Set<number>;
+    /** The visible frame in drawing units; an off-frame corner renders no fallback target. */
+    bounds?: Rect;
     onSelect: (turn: number) => void;
     onHover: (turn?: number) => void;
 }

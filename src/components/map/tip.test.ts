@@ -23,7 +23,7 @@ describe("holding the tip plate inside the frame", () => {
     });
 });
 
-const frame = { cx: 100, cy: 100, scale: 1, mapDeg: 0, frameW: 200, frameH: 200 };
+const frame = { cx: 100, cy: 100, ox: 0, oy: 0, scale: 1, mapDeg: 0, frameW: 200, frameH: 200 };
 
 describe("room around a corner, measured on screen", () => {
     it("measures each edge from the anchor when the plan is flat", () => {

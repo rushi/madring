@@ -253,6 +253,20 @@
             opacity: 0;
         }
     }
+
+    /* Motion-sensitive: the sheet fades up rather than travelling. */
+    @media (prefers-reduced-motion: reduce) {
+        .detail-sheet {
+            animation-name: fade-in;
+        }
+    }
+}
+
+/* The column ease is layout, not arrival: under reduced motion the panel snaps instead. */
+@media (prefers-reduced-motion: reduce) {
+    .stage {
+        transition: none;
+    }
 }
 
 @media (max-width: 760px) {

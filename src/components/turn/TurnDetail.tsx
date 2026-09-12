@@ -8,11 +8,23 @@ import type { CircuitData, Turn } from "../../data/types.ts";
 export function TurnDetail({ data, turn, units, onClose }: Props) {
     const { copy } = data;
     const panel = useRef<HTMLElement>(null);
+    const latest = useRef(turn.n);
 
     /* Opening from the map or the board has to announce itself, not just appear beside them. */
     useEffect(() => {
+        latest.current = turn.n;
         panel.current?.focus();
     }, [turn.n]);
+
+    /* Closing drops the card from the DOM, so the focus it took goes back to the corner's badge. */
+    useEffect(() => {
+        return () => {
+            const badge = document.querySelector(`[data-turn="${latest.current}"]`);
+            if (badge instanceof HTMLElement || badge instanceof SVGElement) {
+                badge.focus();
+            }
+        };
+    }, []);
     const { entryKmh, apexKmh } = turn.speed;
     const hasRun = entryKmh !== null && apexKmh !== null;
     const direction = turnDirection(turn.dir, copy);

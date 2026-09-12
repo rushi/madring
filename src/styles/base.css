@@ -54,12 +54,11 @@ body {
     font-variant-numeric: tabular-nums;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
+/* Arrival without travel: drawers and sheets swap their slide for this fade under reduced motion,
+ * so the state change still reads as something arriving rather than teleporting or not moving. */
+@keyframes fade-in {
+    from {
+        opacity: 0;
     }
 }
 

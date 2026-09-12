@@ -52,6 +52,15 @@ export function placeLabels(boxes: LabelBox[], bounds?: Rect) {
     const taken: Rect[] = [];
 
     for (const box of boxes) {
+        /*
+         * An anchor that has left the frame is off the map, and no label can stand for it: parking
+         * one past the edge prints over the page through the svg's visible overflow. Spilling from
+         * an anchor still inside stays a nudge. Only the sheet's pan can carry an anchor out.
+         */
+        if (bounds && !contains(bounds, box.cx, box.cy)) {
+            continue;
+        }
+
         const reach = Math.hypot(box.dx, box.dy) || 1;
         const ux = box.dx / reach;
         const uy = box.dy / reach;
@@ -97,6 +106,11 @@ export function placeLabels(boxes: LabelBox[], bounds?: Rect) {
 const around = (x: number, y: number, w: number, h: number): Rect => {
     return { x0: x - w / 2, y0: y - h / 2, x1: x + w / 2, y1: y + h / 2 };
 };
+
+/** Whether a point sits inside the frame. The solver and the ticks read the same answer. */
+export function contains(bounds: Rect, x: number, y: number) {
+    return x >= bounds.x0 && x <= bounds.x1 && y >= bounds.y0 && y <= bounds.y1;
+}
 
 /**
  * How far a label reaches past the drawing's own edge, weighted heavily: a label outside the frame

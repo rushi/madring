@@ -68,7 +68,7 @@ function fitOneWay(box: Box, lapW: number, lapH: number, gutter: number) {
     return { scale, w: lapW + pad * 2, h: lapH + pad * 2 };
 }
 
-interface Box {
+export interface Box {
     width: number;
     height: number;
 }

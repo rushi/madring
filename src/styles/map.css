@@ -109,6 +109,12 @@
     display: block;
 }
 
+/* Panned for the sheet, the frame's far edge sits off-viewport: clip it rather than print labels
+   over the masthead. Centred, the plates keep their licence to reach past the viewBox. */
+.map[data-shifted] {
+    overflow: hidden;
+}
+
 /*
  * The lap is a road: a light edge line with the asphalt laid over it, one path stroked twice.
  * A highlight is the same trick on one stretch, so a dyed run always sits exactly on the track.
@@ -354,6 +360,16 @@
 }
 
 /*
+ * The finger's target on a placed badge: 44px at any zoom, invisible, painted under the ring so a
+ * tap a finger's width off the numeral still lands on the corner. Where two targets meet the badge
+ * that paints later wins, and the solver's spacing keeps that rare.
+ */
+.badge-hit {
+    fill: transparent;
+    cursor: pointer;
+}
+
+/*
  * The target a cut badge leaves at its corner. Invisible by default so the map reads as drawn, and
  * it answers to focus and to touch so the corner is never unreachable.
  */
@@ -506,11 +522,17 @@
 }
 
 @media (max-width: 760px) {
-    /* One column: at 375px the wordmark and the controls cannot share a row without colliding. */
+    /* One column: at 375px the wordmark and the controls cannot share a row without colliding.
+       Rows pack tight: every pixel the masthead spends here is charged against the lap. */
     .masthead-bar {
         grid-template-columns: minmax(0, 1fr);
+        gap: var(--md-space-2);
         padding-inline: var(--md-space-4);
-        padding-block: var(--md-space-3) var(--md-space-2);
+        padding-block: var(--md-space-2);
+    }
+
+    .masthead-bar .masthead {
+        font-size: clamp(26px, 7vw, 32px);
     }
 
     .masthead-name,
