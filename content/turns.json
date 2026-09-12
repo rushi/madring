@@ -1,0 +1,797 @@
+{
+  "schemaVersion": 1,
+  "turns": [
+    {
+      "n": 1,
+      "name": null,
+      "dir": "L",
+      "t": 0.1043,
+      "x": 254.2,
+      "y": 622.3,
+      "label": {
+        "dx": 46,
+        "dy": -8,
+        "anchor": "start"
+      },
+      "speed": {
+        "entryKmh": 320,
+        "apexKmh": 100,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": true,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "After the {dist:589} main straight. The start line sits ~{dist:200} before the corner.",
+      "quotes": [],
+      "overtakingRank": 2
+    },
+    {
+      "n": 2,
+      "name": null,
+      "dir": "R",
+      "t": 0.114,
+      "x": 216.8,
+      "y": 613.2,
+      "label": {
+        "dx": -40,
+        "dy": 30,
+        "anchor": "end"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": 671,
+      "note": "Slow. Lowest point on the circuit at {alt:671}.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 3,
+      "name": "Hortaleza",
+      "dir": "R",
+      "t": 0.138,
+      "x": 214.2,
+      "y": 517.4,
+      "label": {
+        "dx": -44,
+        "dy": 6,
+        "anchor": "end"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "Fast sweeper onto the {dist:837} Ribera del Sena straight.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 4,
+      "name": null,
+      "dir": "R",
+      "t": 0.2651,
+      "x": 661.4,
+      "y": 267.4,
+      "label": {
+        "dx": 22,
+        "dy": 58,
+        "anchor": "start"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": 340,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "Flat out. Top speed of the lap.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 5,
+      "name": null,
+      "dir": "R",
+      "t": 0.3071,
+      "x": 825.4,
+      "y": 306.7,
+      "label": {
+        "dx": -40,
+        "dy": 62,
+        "anchor": "end"
+      },
+      "speed": {
+        "entryKmh": 340,
+        "apexKmh": 80,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": true,
+        "crashProne": true,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 2,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 2,
+        "drivers": ["Maciej Gladysz (T5-6, day 1)", "Michael Shin (day 2)"],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "Biggest braking event of the lap; tunnel 1 begins right after.",
+      "quotes": [],
+      "overtakingRank": 1
+    },
+    {
+      "n": 6,
+      "name": "Subida de las Cárcavas",
+      "dir": "L",
+      "t": 0.3198,
+      "x": 869.4,
+      "y": 304.4,
+      "label": {
+        "dx": -40,
+        "dy": -64,
+        "anchor": "end"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "8% climb, {rise:10} of elevation.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 7,
+      "name": "Subida de las Cárcavas",
+      "dir": "L",
+      "t": 0.3453,
+      "x": 965.3,
+      "y": 267,
+      "label": {
+        "dx": -46,
+        "dy": -84,
+        "anchor": "end"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": true,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 3,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 3,
+        "drivers": ["Kanato Le (day 2)", "Fernando Barrichello (day 2)", "Mattia Colnaghi, front wing (day 2)"],
+        "dispute": "One report places the day-2 Barrichello contact at T3. The published totals only reconcile at T7."
+      },
+      "altitudeM": 697,
+      "note": "Blind crest at {alt:697}, the high point. Wall close on exit, then a 5% descent.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 8,
+      "name": "El Búnker",
+      "dir": "R",
+      "t": 0.3771,
+      "x": 1088.4,
+      "y": 226.5,
+      "label": {
+        "dx": -30,
+        "dy": -56,
+        "anchor": "end"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 1,
+        "mechanical": 0,
+        "total": 1,
+        "drivers": ["Fernando Barrichello, spin (day 2)"],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "Downhill, past the Civil War forts of La Mata Espesa.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 9,
+      "name": null,
+      "dir": "R",
+      "t": 0.3903,
+      "x": 1130.1,
+      "y": 255.8,
+      "label": {
+        "dx": 0,
+        "dy": -46,
+        "anchor": "middle"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "Fast. Entry to the permanent Valdebebas section.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 10,
+      "name": "La Chicane",
+      "dir": "R",
+      "t": 0.4419,
+      "x": 1330.8,
+      "y": 241,
+      "label": {
+        "dx": 0,
+        "dy": -64,
+        "anchor": "middle"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": 57,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 1,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 1,
+        "drivers": ["Freddie Slater (day 1)"],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "57 degrees.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 11,
+      "name": "La Chicane",
+      "dir": "L",
+      "t": 0.4616,
+      "x": 1390.1,
+      "y": 290.7,
+      "label": {
+        "dx": 60,
+        "dy": -80,
+        "anchor": "middle"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": 78,
+      "flags": {
+        "overtaking": false,
+        "crashProne": true,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 1,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 1,
+        "drivers": ["Hiyu Yamakoshi (day 2)"],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "78 degrees, 2% counter-bank, very little run-off.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 12,
+      "name": "La Monumental",
+      "dir": "R",
+      "t": 0.5234,
+      "x": 1583.6,
+      "y": 344.5,
+      "label": {
+        "dx": -44,
+        "dy": 102,
+        "anchor": "middle"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": true
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 1,
+        "total": 1,
+        "drivers": ["Bruno Del Pino, car stopped (day 1)"],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "{dist:550} of 24% banking (13.5°). Entry at {speed:180}-{speed:200}, ~{speed:300} at its fastest, about 6 seconds flat out.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 13,
+      "name": null,
+      "dir": "R",
+      "t": 0.6344,
+      "x": 1225.9,
+      "y": 283,
+      "label": {
+        "dx": 10,
+        "dy": 78,
+        "anchor": "middle"
+      },
+      "speed": {
+        "entryKmh": 300,
+        "apexKmh": 140,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": true,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "Hard braking off the banking.",
+      "quotes": [],
+      "overtakingRank": 3
+    },
+    {
+      "n": 14,
+      "name": "Enlazadas de Valdebebas",
+      "dir": "L",
+      "t": 0.6694,
+      "x": 1129.7,
+      "y": 386.8,
+      "label": {
+        "dx": -10,
+        "dy": 50,
+        "anchor": "middle"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 1,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 1,
+        "drivers": ["Nicola Lacorte (day 2)"],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "Flat out.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 15,
+      "name": "Enlazadas de Valdebebas",
+      "dir": "R",
+      "t": 0.7129,
+      "x": 963.1,
+      "y": 426.9,
+      "label": {
+        "dx": -40,
+        "dy": -6,
+        "anchor": "end"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": 90,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "Flat out, 90 degrees.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 16,
+      "name": "Enlazadas de Valdebebas",
+      "dir": "L",
+      "t": 0.7467,
+      "x": 943.7,
+      "y": 560.1,
+      "label": {
+        "dx": -44,
+        "dy": 6,
+        "anchor": "end"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "Flat out.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 17,
+      "name": null,
+      "dir": "R",
+      "t": 0.7597,
+      "x": 964.3,
+      "y": 609.1,
+      "label": {
+        "dx": 44,
+        "dy": 8,
+        "anchor": "start"
+      },
+      "speed": {
+        "entryKmh": 280,
+        "apexKmh": 100,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": true,
+        "crashProne": true,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 2,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 2,
+        "drivers": ["Fernando Barrichello (day 1)", "Jin Nakamura (day 1)"],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "Curved braking zone, walls both sides, into tunnel 2.",
+      "quotes": [],
+      "overtakingRank": 4
+    },
+    {
+      "n": 18,
+      "name": "Norte",
+      "dir": "R",
+      "t": 0.8022,
+      "x": 821.4,
+      "y": 704.9,
+      "label": {
+        "dx": -50,
+        "dy": -8,
+        "anchor": "end"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "At the tunnel 2 exit, by the North Convention Centre. {dist:25} wide.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 19,
+      "name": null,
+      "dir": "L",
+      "t": 0.8387,
+      "x": 805.9,
+      "y": 850.4,
+      "label": {
+        "dx": 44,
+        "dy": 4,
+        "anchor": "start"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": 260,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "Between IFEMA halls 14 and 12.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 20,
+      "name": null,
+      "dir": "R",
+      "t": 0.9047,
+      "x": 551,
+      "y": 918.6,
+      "label": {
+        "dx": 38,
+        "dy": 40,
+        "anchor": "start"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": 117,
+      "flags": {
+        "overtaking": true,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "117 degrees, and a heavy stop.",
+      "quotes": [],
+      "overtakingRank": 5
+    },
+    {
+      "n": 21,
+      "name": null,
+      "dir": "R",
+      "t": 0.9332,
+      "x": 570.7,
+      "y": 1029.6,
+      "label": {
+        "dx": 44,
+        "dy": 10,
+        "anchor": "start"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": 71,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "71 degrees. Slow and wall-lined, along Hall 14.",
+      "quotes": [],
+      "overtakingRank": null
+    },
+    {
+      "n": 22,
+      "name": "El Parque",
+      "dir": "R",
+      "t": 0.9895,
+      "x": 347.4,
+      "y": 1077.1,
+      "label": {
+        "dx": -8,
+        "dy": 62,
+        "anchor": "middle"
+      },
+      "speed": {
+        "entryKmh": null,
+        "apexKmh": null,
+        "source": "projection"
+      },
+      "angleDeg": null,
+      "flags": {
+        "overtaking": false,
+        "crashProne": false,
+        "banked": false
+      },
+      "f3": {
+        "contacts": 0,
+        "spins": 0,
+        "mechanical": 0,
+        "total": 0,
+        "drivers": [],
+        "dispute": null
+      },
+      "altitudeM": null,
+      "note": "Alongside Juan Carlos I Park. Overtake Mode detection before the entry, activation at the exit.",
+      "quotes": [],
+      "overtakingRank": null
+    }
+  ]
+}

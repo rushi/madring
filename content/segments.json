@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "id": "braking.t1",
+      "set": "braking",
+      "turn": 1,
+      "label": "T1 braking zone",
+      "t0": 0.055,
+      "t1": 0.10027606901725432
+    },
+    {
+      "id": "braking.t5",
+      "set": "braking",
+      "turn": 5,
+      "label": "T5 braking zone",
+      "t0": 0.283,
+      "t1": 0.3040767691922981
+    },
+    {
+      "id": "braking.t13",
+      "set": "braking",
+      "turn": 13,
+      "label": "T13 braking zone",
+      "t0": 0.598,
+      "t1": 0.6314086021505377
+    },
+    {
+      "id": "braking.t17",
+      "set": "braking",
+      "turn": 17,
+      "label": "T17 braking zone",
+      "t0": 0.737,
+      "t1": 0.7566899224806203
+    },
+    {
+      "id": "braking.t20",
+      "set": "braking",
+      "turn": 20,
+      "label": "T20 braking zone",
+      "t0": 0.884,
+      "t1": 0.9017261815453864
+    },
+    {
+      "id": "hazard.chicane-5-6",
+      "set": "hazard",
+      "turn": null,
+      "label": "T5-6 chicane",
+      "why": "Worst spot of the F3 test. Aggressive kerbs, and the barrier angle on exit makes a pinch point.",
+      "t0": 0.3040767691922981,
+      "t1": 0.3258299574893724
+    },
+    {
+      "id": "hazard.crest-7",
+      "set": "hazard",
+      "turn": null,
+      "label": "T7 blind crest",
+      "why": "The apex is out of sight under braking and the wall is close on exit.",
+      "t0": 0.338,
+      "t1": 0.353
+    },
+    {
+      "id": "hazard.t11",
+      "set": "hazard",
+      "turn": null,
+      "label": "T11 run-off",
+      "why": "Very little run-off. Several F3 cars went off here.",
+      "t0": 0.4556154038509628,
+      "t1": 0.4696154038509628
+    },
+    {
+      "id": "hazard.t17-tunnel",
+      "set": "hazard",
+      "turn": null,
+      "label": "T17 tunnel walls",
+      "why": "90 degrees into a tunnel, concrete both sides, in turbulent air off T14-15.",
+      "t0": 0.7566899224806203,
+      "t1": 0.774
+    },
+    {
+      "id": "banked.monumental",
+      "set": "banked",
+      "turn": 12,
+      "label": "La Monumental",
+      "t0": 0.472,
+      "t1": 0.588
+    },
+    {
+      "id": "aero.straight-main",
+      "set": "straightMode",
+      "turn": null,
+      "label": "Straight Mode: main straight",
+      "t0": 0.9895,
+      "t1": 1.0
+    },
+    {
+      "id": "aero.straight-main-wrap",
+      "set": "straightMode",
+      "turn": null,
+      "label": "Straight Mode: main straight",
+      "t0": 0.0,
+      "t1": 0.1043
+    },
+    {
+      "id": "aero.straight-t3",
+      "set": "straightMode",
+      "turn": null,
+      "label": "Straight Mode: Ribera del Sena",
+      "t0": 0.138,
+      "t1": 0.3071
+    },
+    {
+      "id": "aero.overtake-detect",
+      "set": "overtakeMode",
+      "turn": 22,
+      "label": "Overtake Mode detection",
+      "t0": 0.9332,
+      "t1": 0.9895
+    },
+    {
+      "id": "aero.overtake-active",
+      "set": "overtakeMode",
+      "turn": 22,
+      "label": "Overtake Mode activation",
+      "t0": 0.9895,
+      "t1": 1.0
+    },
+    {
+      "id": "elevation.climb",
+      "set": "elevation",
+      "turn": 7,
+      "label": "8% climb to the crest",
+      "t0": 0.3198,
+      "t1": 0.3453
+    },
+    {
+      "id": "elevation.descent",
+      "set": "elevation",
+      "turn": 8,
+      "label": "5% descent off the crest",
+      "t0": 0.3453,
+      "t1": 0.3771
+    }
+  ]
+}

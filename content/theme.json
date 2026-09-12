@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "color": {
+    "light": {
+      "red": "#D92D2D",
+      "red-deep": "#A80400",
+      "paper": "#F6F3EE",
+      "paper-2": "#EBE7DF",
+      "ink": "#141821",
+      "ink-2": "#4A5260",
+      "hair": "#767E8A",
+      "amber": "#FFB000",
+      "amber-dim": "#7A5200",
+      "flap": "#16191C",
+      "edge": "#1B1F24",
+      "asphalt": "#3A4049",
+      "badge-face": "#141821",
+      "badge-ink": "#F6F3EE",
+      "hl-overtake": "#00A344",
+      "hl-crash": "#FF4242",
+      "hl-banked": "#B88100",
+      "hl-aero": "#008FF5",
+      "hl-gradient": "#A96BFF",
+      "pit": "#008FF5",
+      "tunnel": "#008FF5"
+    },
+    "dark": {
+      "red": "#FF4D4D",
+      "paper": "#0E1218",
+      "paper-2": "#151B24",
+      "ink": "#F4F6F8",
+      "ink-2": "#AAB3BF",
+      "hair": "#6B7683",
+      "edge": "#DFE4EA",
+      "asphalt": "#2B313A",
+      "badge-face": "#F4F6F8",
+      "badge-ink": "#0E1218",
+      "hl-overtake": "#3DDC84",
+      "hl-crash": "#FF4D4D",
+      "hl-banked": "#F5C451",
+      "hl-aero": "#4CC3FF",
+      "hl-gradient": "#A78BDB",
+      "pit": "#8FD3FF",
+      "tunnel": "#4CC3FF"
+    }
+  },
+  "type": {
+    "sign": {
+      "family": "Anybody",
+      "stack": "\"Anybody\", \"Anybody Fallback\", \"Archivo\", system-ui, sans-serif",
+      "wdthMin": 50,
+      "wdthMax": 150
+    },
+    "text": {
+      "family": "Archivo",
+      "stack": "\"Archivo\", \"Archivo Fallback\", system-ui, sans-serif"
+    },
+    "minPx": 12,
+    "roles": {
+      "masthead": {
+        "face": "sign",
+        "px": 44,
+        "wght": 800,
+        "wdthFloor": 50
+      },
+      "line-label": {
+        "face": "sign",
+        "px": 24,
+        "wght": 700,
+        "wdthFloor": 50
+      },
+      "map-numeral": {
+        "face": "sign",
+        "px": 13,
+        "wght": 700,
+        "wdthFloor": 87
+      },
+      "map-label": {
+        "face": "text",
+        "px": 12,
+        "wght": 600,
+        "tracking": 0.02
+      },
+      "map-section": {
+        "face": "sign",
+        "px": 14,
+        "wght": 600,
+        "wdthFloor": 75,
+        "tracking": 0.18
+      },
+      "map-scenery": {
+        "face": "sign",
+        "px": 12,
+        "wght": 600,
+        "wdthFloor": 75,
+        "tracking": 0.12
+      },
+      "board-cell": {
+        "face": "text",
+        "px": 15,
+        "wght": 500,
+        "numeric": "tabular-nums"
+      },
+      "prose": {
+        "face": "text",
+        "px": 16,
+        "wght": 400
+      }
+    }
+  },
+  "motion": {
+    "flapMs": 90,
+    "flapMax": 6,
+    "flapStaggerMs": 24,
+    "dyeMs": 160,
+    "cameraMs": 240,
+    "wakeDecayMs": 1200
+  },
+  "layout": {
+    "panelPx": 232,
+    "gridDotPx": 40,
+    "breakpointWide": 1100,
+    "breakpointMid": 760,
+    "maxPlan": "70vh",
+    "mapGutterPx": 96,
+    "compactGutterPx": 46,
+    "compactPx": 560
+  },
+  "space": {
+    "1": 4,
+    "2": 8,
+    "3": 12,
+    "4": 16,
+    "5": 24,
+    "6": 32,
+    "7": 40
+  }
+}

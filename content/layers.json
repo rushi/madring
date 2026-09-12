@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "groups": [
+    {
+      "id": "highlights",
+      "label": "Highlights",
+      "layers": [
+        {
+          "id": "overtake",
+          "label": "Overtaking zones",
+          "default": true,
+          "livery": "hl-overtake",
+          "fill": "solid",
+          "glow": true,
+          "segmentSets": ["braking"],
+          "turnFlag": "flags.overtaking"
+        },
+        {
+          "id": "crash",
+          "label": "Crash-prone corners",
+          "default": true,
+          "livery": "hl-crash",
+          "fill": "stipple",
+          "glow": true,
+          "segmentSets": ["hazard"],
+          "turnFlag": "flags.crashProne"
+        },
+        {
+          "id": "banked",
+          "label": "La Monumental banking",
+          "default": true,
+          "livery": "hl-banked",
+          "fill": "hatch45",
+          "glow": true,
+          "segmentSets": ["banked"],
+          "turnFlag": "flags.banked"
+        },
+        {
+          "id": "aero",
+          "label": "Straight and Overtake Mode",
+          "default": false,
+          "livery": "hl-aero",
+          "fill": "dashed",
+          "glow": false,
+          "segmentSets": ["straightMode", "overtakeMode"]
+        },
+        {
+          "id": "gradient",
+          "label": "Climb and descent",
+          "default": false,
+          "livery": "hl-gradient",
+          "fill": "chevron",
+          "glow": false,
+          "segmentSets": ["elevation"]
+        }
+      ]
+    },
+    {
+      "id": "labels",
+      "label": "Labels",
+      "layers": [
+        { "id": "names", "label": "Corner names", "default": false },
+        { "id": "notes", "label": "Speed notes", "default": true },
+        { "id": "tags", "label": "L / R tags", "default": false },
+        { "id": "straights", "label": "Straights", "default": true }
+      ]
+    },
+    {
+      "id": "scenery",
+      "label": "Scenery",
+      "layers": [
+        { "id": "paddock", "label": "Pit lane & paddock", "default": true, "livery": "pit" },
+        { "id": "tunnels", "label": "Tunnels", "default": true, "livery": "tunnel" },
+        { "id": "sections", "label": "Section names", "default": true },
+        { "id": "startfinish", "label": "Start / finish", "default": true },
+        { "id": "legend", "label": "Key", "default": true },
+        { "id": "grid", "label": "Dot grid", "default": false }
+      ]
+    }
+  ]
+}
