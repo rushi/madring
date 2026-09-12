@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <title>Madring · Circuito de Madring</title>
+        <meta
+            name="description"
+            content="What does one lap of the Madring hold? Twenty-two corners read as the transport network they sit inside, with a layer for overtaking, danger, banking, gradient and 2026 aero modes."
+        />
+        <!-- Fonts before the data: the page is drawn from the HTML now, so what decides when it
+             stops changing shape is the faces that text is set in, not the bundle behind it. -->
+        <link rel="preload" href="%BASE_URL%fonts/anybody-sign.woff2" as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href="%BASE_URL%fonts/archivo-text.woff2" as="font" type="font/woff2" crossorigin />
+        <!--data-preload-->
+        <style>
+            /* Declared here so the faces are known before any stylesheet loads, and so the
+               Pages base path resolves through %BASE_URL% rather than a root-absolute URL. */
+            @font-face {
+                font-family: "Anybody";
+                src: url("%BASE_URL%fonts/anybody-sign.woff2") format("woff2-variations");
+                font-weight: 100 900;
+                font-stretch: 50% 150%;
+                font-display: swap;
+            }
+            @font-face {
+                font-family: "Archivo";
+                src: url("%BASE_URL%fonts/archivo-text.woff2") format("woff2-variations");
+                font-weight: 100 900;
+                font-display: swap;
+            }
+            /*
+             * The faces the page falls back to while the real ones load, bent to the metrics of the
+             * ones they stand in for. Measured against Arial: Archivo sets 97.85% as wide and
+             * Anybody 91.49%, so without this the text reflows the moment a face arrives. The
+             * standfirst is the largest thing on the page, which makes that reflow the moment the
+             * browser calls the largest paint, and it is what moved the figure from 0.7s to 2.7s.
+             */
+            @font-face {
+                font-family: "Archivo Fallback";
+                src: local("Arial");
+                size-adjust: 97.85%;
+                ascent-override: 88%;
+                descent-override: 21%;
+                line-gap-override: 0%;
+            }
+            @font-face {
+                font-family: "Anybody Fallback";
+                src: local("Arial");
+                size-adjust: 91.49%;
+                ascent-override: 79%;
+                descent-override: 24%;
+                line-gap-override: 0%;
+            }
+        </style>
+        <script>
+            /* Before first paint, or the page shows the OS palette and then swaps to the stored
+               choice. Kept inline and tiny for that reason; the module bundle is far too late. */
+            try {
+                var stored = localStorage.getItem("madring.theme");
+                if (stored === "light" || stored === "dark") {
+                    document.documentElement.setAttribute("data-theme", stored);
+                }
+            } catch (ignored) {}
+        </script>
+    </head>
+    <body>
+        <div id="root"></div>
+        <!--lap-seed-->
+        <script type="module" src="/src/main.tsx"></script>
+    </body>
+</html>

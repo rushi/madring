@@ -1,0 +1,17 @@
+node_modules
+dist
+.DS_Store
+
+# build artifacts of `pnpm ingest`. content/ is the reviewed source.
+public/data/circuit.v1.json
+src/styles/tokens.generated.css
+.eslintcache
+
+# working files kept out of the published tree
+assets/initial/
+source/Madring_2026.svg
+tools/build_map.py
+HANDOFF.md
+research.md
+todo.txt
+docs/

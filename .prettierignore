@@ -1,0 +1,8 @@
+node_modules
+dist
+/public/data
+/src/styles/tokens.generated.css
+/assets
+/source
+/data
+/git_ignore
