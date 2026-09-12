@@ -94,6 +94,12 @@ export const CircuitMap = memo(function CircuitMap(props: Props) {
                     <DotGrid bbox={bbox} pitch={Number(data.layout.gridDotPx)} pad={gutter * counter + shiftY} />
                 )}
                 {state.sections && <SectionLabels compact={compact} facts={facts} counter={counter} mapDeg={mapDeg} />}
+                <HighlightGlow pathD={pathD} totalPx={totalPx} geometry={geometry} lit={flooded} />
+                <TrackLine pathD={pathD} />
+                <HighlightRuns pathD={pathD} totalPx={totalPx} geometry={geometry} counter={counter} lit={flooded} />
+
+                {/* Above the runs: a lit highlight's glow reaches 38px out and the lane sits at 20,
+                    so drawn under it the pit road wore the dye of a zone it is not part of. */}
                 {state.paddock && (
                     <PitLane
                         compact={compact}
@@ -105,10 +111,6 @@ export const CircuitMap = memo(function CircuitMap(props: Props) {
                         placed={placed}
                     />
                 )}
-
-                <HighlightGlow pathD={pathD} totalPx={totalPx} geometry={geometry} lit={flooded} />
-                <TrackLine pathD={pathD} />
-                <HighlightRuns pathD={pathD} totalPx={totalPx} geometry={geometry} counter={counter} lit={flooded} />
 
                 {state.straights && (
                     <StraightLabels

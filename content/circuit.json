@@ -74,11 +74,11 @@
     "buildingLabelShort": "GARAGES",
     "paddockLabel": "PADDOCK",
     "paddockNote": "IFEMA HALLS · FULLY COVERED",
-    "entryT": 0.968,
-    "exitT": 0.126,
-    "lane": { "t0": 0.006, "t1": 0.1, "offsetPx": 44 },
-    "building": { "anchorT": 0.053, "offsetPx": 86, "lengthPx": 300, "widthPx": 34 },
-    "block": { "anchorT": 0.053, "offsetPx": 150, "lengthPx": 300, "widthPx": 64 }
+    "entryT": 0.988,
+    "exitT": 0.152,
+    "lane": { "t0": 0.006, "t1": 0.1, "offsetPx": 20 },
+    "building": { "anchorT": 0.053, "offsetPx": 44, "lengthPx": 300, "widthPx": 34 },
+    "block": { "anchorT": 0.053, "offsetPx": 100, "lengthPx": 300, "widthPx": 64 }
   },
   "laMonumental": {
     "turn": 12,
