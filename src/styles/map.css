@@ -29,6 +29,17 @@
     font-size: clamp(32px, 5vw, var(--md-masthead-size));
 }
 
+/* The wordmark is a route home, not a link in prose, so it keeps the wordmark's own colour. */
+.masthead-bar .masthead a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.masthead-bar .masthead a:focus-visible {
+    outline: 2px solid var(--md-ink);
+    outline-offset: 4px;
+}
+
 /*
  * Sits under the wordmark as its subtitle, so the paragraph's own default margin has to go: it was
  * pushing 15px between the two and breaking them into separate things.

@@ -23,3 +23,33 @@ export function interpolate(text: string, units: Units, copy: Record<string, str
         }
     });
 }
+
+/** A run of prose, flagged when content marked it for emphasis with `*stars*`. */
+export interface Part {
+    text: string;
+    lead: boolean;
+}
+
+const LEAD = /\*([^*]+)\*/g;
+
+/**
+ * The same prose split into runs, so a caller can render the marked figures heavier than the words
+ * around them. Content decides what is marked, which keeps the emphasis out of the components.
+ */
+export function interpolateParts(text: string, units: Units, copy: Record<string, string>): Part[] {
+    const parts: Part[] = [];
+    let at = 0;
+
+    for (const match of text.matchAll(LEAD)) {
+        if (match.index > at) {
+            parts.push({ text: interpolate(text.slice(at, match.index), units, copy), lead: false });
+        }
+        parts.push({ text: interpolate(match[1] ?? "", units, copy), lead: true });
+        at = match.index + match[0].length;
+    }
+
+    if (at < text.length) {
+        parts.push({ text: interpolate(text.slice(at), units, copy), lead: false });
+    }
+    return parts;
+}

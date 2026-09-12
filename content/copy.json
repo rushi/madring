@@ -5,7 +5,7 @@
     "site.subtitle": "Circuito de Madring · Madrid",
     "site.tagline": "Four lines across one lap",
     "stamp.projection.full": "Promoter projection, not a measured speed. This circuit has not been raced.",
-    "site.headline": "Twenty-two corners over {long:5.416}. The race is 57 laps of it, {long:308.524} in all. Switch a layer on to read one thing at a time.",
+    "site.headline": "*Twenty-two* corners over *{long:5.416}* of Madrid's exciting new circuit. The race is *57* laps of it, *{long:308.524}* in all. Switch a layer on to read one thing at a time.",
     "site.question": "What does one lap of the Madring hold?",
     "layers.label": "Map layers",
     "panel.hide": "Hide panel",
@@ -45,6 +45,7 @@
     "detail.gradient": "GRADE",
     "detail.altitude": "ALTITUDE",
     "turn.separator": " · ",
-    "detail.close": "Close corner detail"
+    "detail.close": "Close corner detail",
+    "site.home": "Madring, back to the full lap"
   }
 }

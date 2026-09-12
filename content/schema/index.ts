@@ -117,6 +117,8 @@ export const circuitFileSchema = z.object({
     pitPaddock: z.object({
         garages: z.int(),
         buildingLabel: z.string(),
+        /** Shorter name for the same slab, used where the full one outruns it on a compact map. */
+        buildingLabelShort: z.string(),
         paddockLabel: z.string(),
         paddockNote: z.string(),
         entryT: trackPoint,

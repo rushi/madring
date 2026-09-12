@@ -21,7 +21,7 @@ function trackSeed(): Plugin {
                 const bundle = readBundle();
                 const preload = `<link rel="preload" href="${ctx.server ? "/" : base}data/circuit.v1.json?v=${buildId}" as="fetch" crossorigin />`;
                 /* Both are replacement strings, where a $ in the copy would be read as a capture reference. */
-                const markup = seedMarkup(bundle);
+                const markup = seedMarkup(bundle, ctx.server ? "/" : base);
                 const seeded = html.replace(SEED_MARKER, () => markup).replace(DATA_MARKER, () => preload);
 
                 return ctx.bundle ? inlineStyles(seeded, ctx.bundle) : seeded;

@@ -8,7 +8,7 @@ import { LayerPanel } from "./components/layers/LayerPanel.tsx";
 import { MapLegend } from "./components/layers/MapLegend.tsx";
 import { CircuitMap } from "./components/map/CircuitMap.tsx";
 import { TurnDetail } from "./components/turn/TurnDetail.tsx";
-import { interpolate } from "./data/interpolate.ts";
+import { interpolateParts } from "./data/interpolate.ts";
 import { loadCircuit } from "./data/load.ts";
 import { kinOf } from "./data/runs.ts";
 import { stampTheme } from "./data/theme.ts";
@@ -87,7 +87,7 @@ function Shell({ circuit }: { circuit: CircuitData }) {
     /* index.html stamps the stored choice before first paint; this keeps it true after a click. */
     useEffect(() => stampTheme(document.documentElement, theme), [theme]);
 
-    const headline = circuit.copy["site.headline"] ?? "";
+    const headline = interpolateParts(circuit.copy["site.headline"] ?? "", units, circuit.copy);
     const kin = useMemo(() => kinOf(circuit.namedRuns, turn), [circuit, turn]);
     const state = useMemo(() => resolveLayers(circuit, overrides), [circuit, overrides]);
     const known = useMemo(() => knownOverrides(circuit, overrides), [circuit, overrides]);
@@ -125,11 +125,17 @@ function Shell({ circuit }: { circuit: CircuitData }) {
         <div className="shell">
             <header className="masthead-bar">
                 <div className="masthead-name">
-                    <h1 className="sign masthead">{circuit.facts.name}</h1>
+                    <h1 className="sign masthead">
+                        <a href={import.meta.env.BASE_URL} title={circuit.copy["site.home"]}>
+                            {circuit.facts.name}
+                        </a>
+                    </h1>
                     <p className="site-question">{circuit.copy["site.question"]}</p>
                 </div>
 
-                <p className="site-headline">{interpolate(headline, units, circuit.copy)}</p>
+                <p className="site-headline">
+                    {headline.map((part, at) => (part.lead ? <strong key={at}>{part.text}</strong> : part.text))}
+                </p>
 
                 <div className="masthead-controls">
                     <button

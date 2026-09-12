@@ -1,4 +1,4 @@
-import { interpolate } from "../src/data/interpolate.ts";
+import { interpolateParts } from "../src/data/interpolate.ts";
 import type { Copy } from "../src/data/types.ts";
 
 /**
@@ -22,7 +22,7 @@ const PAD_RATIO = 0.09;
  * beside it. The masthead is here because the largest thing on the page is the standfirst, and a
  * largest paint that waits for two bundles is a page that reads as empty for a second.
  */
-export function seedMarkup(bundle: Seedable) {
+export function seedMarkup(bundle: Seedable, base = "/") {
     const { bbox, pathD, copy, facts } = bundle;
     const cx = round(bbox.x + bbox.w / 2);
     const cy = round(bbox.y + bbox.h / 2);
@@ -52,10 +52,10 @@ export function seedMarkup(bundle: Seedable) {
     const masthead = [
         `<header class="masthead-bar">`,
         `<div class="masthead-name">`,
-        `<h1 class="sign masthead">${escape(facts.name)}</h1>`,
+        `<h1 class="sign masthead"><a href="${escape(base)}" title="${escape(copy["site.home"] ?? "")}">${escape(facts.name)}</a></h1>`,
         `<p class="site-question">${escape(copy["site.question"] ?? "")}</p>`,
         `</div>`,
-        `<p class="site-headline">${escape(interpolate(copy["site.headline"] ?? "", "metric", copy))}</p>`,
+        `<p class="site-headline">${headline(copy)}</p>`,
         `<div class="masthead-controls">${controls}</div>`,
         `</header>`,
     ].join("");
@@ -102,6 +102,12 @@ function group(legend = "", chips: string[]) {
 }
 
 const escape = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/** The standfirst with its figures marked, matching what React renders once the bundle lands. */
+function headline(copy: Copy) {
+    const parts = interpolateParts(copy["site.headline"] ?? "", "metric", copy);
+    return parts.map((part) => (part.lead ? `<strong>${escape(part.text)}</strong>` : escape(part.text))).join("");
+}
 
 /**
  * The lap as points, thinned, then written back at whole units and closed. The ingest repeats the

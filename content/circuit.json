@@ -71,6 +71,7 @@
   "pitPaddock": {
     "garages": 14,
     "buildingLabel": "14 GARAGES",
+    "buildingLabelShort": "GARAGES",
     "paddockLabel": "PADDOCK",
     "paddockNote": "IFEMA HALLS · FULLY COVERED",
     "entryT": 0.968,

@@ -27,7 +27,7 @@ export const PIT_OUT = "pit-out";
  */
 export const PitLane = memo(function PitLane({ geometry, facts, copy, counter, mapDeg, placed, compact }: Props) {
     const { lane, building, block, entryT, exitT } = facts.pitPaddock;
-    const { buildingLabel, paddockLabel, paddockNote } = facts.pitPaddock;
+    const { buildingLabel, buildingLabelShort, paddockLabel, paddockNote } = facts.pitPaddock;
 
     /* The lane and its two stubs are shaped by the lap alone, but counter and mapDeg change on
      * every resize tick and defeat the memo above, so each would re-walk 48 samples of trig to
@@ -42,6 +42,15 @@ export const PitLane = memo(function PitLane({ geometry, facts, copy, counter, m
     const gateIn = placed.get(PIT_IN);
     const gateOut = placed.get(PIT_OUT);
     const fits = (text: string, px: number, slab: number) => !compact && plateWidth(text, px, 6) <= slab / counter;
+
+    /*
+     * The garages keep a name on a compact map. "14 GARAGES" at 13 px wants 93 screen px against
+     * the 91 the slab has, so the count goes and the word stays on the 12 px floor. Without it the
+     * largest object beside the lap is an unlabelled blue box.
+     */
+    const garagePx = compact ? LABEL_PX : BUILDING_PX;
+    const garageText = compact ? buildingLabelShort : buildingLabel;
+    const garageFits = plateWidth(garageText, garagePx, 6) <= building.lengthPx / counter;
 
     return (
         <g className="pit" aria-hidden="true">
@@ -58,14 +67,14 @@ export const PitLane = memo(function PitLane({ geometry, facts, copy, counter, m
                     height={building.widthPx}
                     rx="4"
                 />
-                {fits(buildingLabel, BUILDING_PX, building.lengthPx) && (
+                {garageFits && (
                     <text
                         className="pit-building-label"
                         transform={`scale(${counter})`}
-                        fontSize={BUILDING_PX}
+                        fontSize={garagePx}
                         dy="0.34em"
                     >
-                        {buildingLabel}
+                        {garageText}
                     </text>
                 )}
             </g>
