@@ -281,7 +281,12 @@
      * this box overflows the painted one to carry the target instead. Width defaults to the
      * element's own, keeping two segments of a pill out of each other; squares opt into 44 below.
      */
+    .topbar .colophon a {
+        position: relative;
+    }
+
     .topbar .unit::after,
+    .topbar .colophon a::after,
     .topbar-menu::after,
     .lenschip::after,
     .detail-close::after {
@@ -310,11 +315,23 @@
     border-block-end: 1px solid var(--md-paper-2);
 }
 
+/* Wordmark over byline: the bar has 48px of height and the two stack inside it. */
 .topbar-name {
+    display: grid;
+    min-inline-size: 0;
+    line-height: 1.1;
+}
+
+.topbar-wordmark {
     font-size: 23px;
     /* The compact sign stack ships only 700; without this the name computes 400 and borrows the
        face's nearest weight instead of stating its own. */
     font-weight: var(--md-line-label-weight);
+}
+
+/* The bar's byline is one line: the wordmark above it sets the column's width, not the credit. */
+.topbar .colophon {
+    white-space: nowrap;
 }
 
 /* A boxed button, not a bare glyph: the ☰ is the only icon in the bar, and an unboxed icon reads

@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
+import { Colophon } from "./components/chrome/Colophon.tsx";
 import { MenuSheet } from "./components/chrome/MenuSheet.tsx";
 import { ProvenanceStamp } from "./components/chrome/ProvenanceStamp.tsx";
 import { ThemeToggle } from "./components/chrome/ThemeToggle.tsx";
@@ -171,6 +172,7 @@ function Shell({ circuit }: { circuit: CircuitData }) {
                         </a>
                     </h1>
                     <p className="site-question">{circuit.copy["site.question"]}</p>
+                    <Colophon copy={circuit.copy} />
                 </div>
 
                 <p className="site-headline">

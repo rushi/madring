@@ -54,6 +54,11 @@
     color: var(--md-ink-2);
 }
 
+/* Under the subtitle, which a short viewport drops: the credit stays either way. */
+.masthead-name .colophon {
+    margin-block-start: var(--md-space-1);
+}
+
 .site-headline {
     max-inline-size: 84ch;
     margin: 0;

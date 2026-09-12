@@ -456,3 +456,21 @@
         transition: none;
     }
 }
+
+/* Credit rides in the chrome at both sizes, at the 12px map-label floor. */
+.colophon {
+    margin: 0;
+    font-size: var(--md-map-label-size);
+    color: var(--md-ink-2);
+}
+
+.colophon a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.colophon a:hover,
+.colophon a:focus-visible {
+    color: var(--md-ink);
+}

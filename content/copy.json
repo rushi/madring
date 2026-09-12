@@ -56,6 +56,10 @@
     "layers.groupState": "{on} of {total} on",
     "about.title": "About this map",
     "sheet.close": "Close panel",
-    "about.what": "What the Madring is"
+    "about.what": "What the Madring is",
+    "author.prefix": "Made by",
+    "author.name": "Rushi Vishavadia",
+    "author.url": "https://rushi.vishavadia.com/?utm_source=madring&utm_medium=referral&utm_campaign=author-attribution",
+    "author.title": "Rushi Vishavadia, personal site"
   }
 }
