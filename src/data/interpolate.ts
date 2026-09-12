@@ -1,7 +1,7 @@
 import { altitude, altitudeUnit, distance, distanceUnit, longDistance, longUnit, speed, speedUnit } from "./format.ts";
 import type { Units } from "./format.ts";
 
-const TOKEN = /\{(speed|dist|long|alt|rise):(-?\d+(?:\.\d+)?)\}/g;
+const TOKEN = /\{(speed|plain|dist|long|alt|rise):(-?\d+(?:\.\d+)?)\}/g;
 
 /**
  * Prose carries figures too, so authors write `{speed:340}` in content and the unit follows the
@@ -14,6 +14,9 @@ export function interpolate(text: string, units: Units, copy: Record<string, str
         switch (kind) {
             case "speed":
                 return `${speed(value, units)} ${speedUnit(units, copy)}`;
+            /* The open end of a speed range: it converts like a speed but the unit belongs to the pair. */
+            case "plain":
+                return String(speed(value, units));
             case "dist":
                 return `${distance(value, units)} ${distanceUnit(units, copy)}`;
             case "long":

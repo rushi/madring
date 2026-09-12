@@ -46,6 +46,16 @@
     "detail.altitude": "ALTITUDE",
     "turn.separator": " · ",
     "detail.close": "Close corner detail",
-    "site.home": "Madring, back to the full lap"
+    "site.home": "Madring, back to the full lap",
+    "rail.label": "Layers",
+    "rail.hint": "Layers · map updates live",
+    "rail.more": "Labels & scenery",
+    "detail.tags": "Layers this corner is in",
+    "menu.label": "Menu",
+    "detail.prevNext": "{prev} · {next}",
+    "layers.groupState": "{on} of {total} on",
+    "about.title": "About this map",
+    "sheet.close": "Close panel",
+    "about.what": "What the Madring is"
   }
 }

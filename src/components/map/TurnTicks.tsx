@@ -16,6 +16,11 @@ const RING_GAP = 2.5;
 /** Screen-px radius of a corner's tap target, badge or no badge. Comfortably past the 44px floor. */
 const HIT_R = 22;
 
+/* The aureole a claimed badge carries, in the badge's own screen-px space: wider than the ring and
+ * blurred, so a lit corner reads from across the map the way its run on the road does. */
+const HALO_EXTRA = 4;
+const HALO_BLUR = 2.5;
+
 /** Shared empty claims, so an unclaimed corner keeps one stable reference across renders. */
 const EMPTY: Layer[] = [];
 
@@ -45,6 +50,11 @@ export const TurnTicks = memo(function TurnTicks(props: Props) {
 
     return (
         <g className="ticks">
+            <defs>
+                <filter id="badge-halo" x="-60%" y="-60%" width="220%" height="220%">
+                    <feGaussianBlur stdDeviation={HALO_BLUR} />
+                </filter>
+            </defs>
             {turns.map((turn) => (
                 <Tick
                     key={turn.n}
@@ -127,6 +137,8 @@ const Tick = memo(function Tick(props: TickProps) {
     }
 
     const claimed = claims[0];
+    /* Solved once for the pair: the halo is the ring's blurred twin and has to trace the same arcs. */
+    const arcs = ringArcs(claims, compact);
     /* The dye rides a custom property: a presentation attribute would lose to the stylesheet. */
     const ring = badgeRing(compact);
     const dye = claimed ? ({ "--dye": dyeVar(claimed.livery) } as CSSProperties) : undefined;
@@ -152,7 +164,8 @@ const Tick = memo(function Tick(props: TickProps) {
                 {/* The finger's target is wider than the badge it carries. First child, so the
                  * ring and numeral paint over it; a transparent fill still takes the pointer. */}
                 <circle className="badge-hit" r={HIT_R} />
-                <Ring claims={claims} compact={compact} />
+                {arcs.length > 0 && <Halo compact={compact} arcs={arcs} />}
+                <Ring compact={compact} arcs={arcs} />
                 <circle className="badge-face" r={ring.face} />
                 <text className="badge-numeral" dy="0.34em">
                     {turn.n}
@@ -172,31 +185,61 @@ const Tick = memo(function Tick(props: TickProps) {
     );
 });
 
+type RingArc = ReturnType<typeof ringArcs>[number];
+
+/** One arc per claiming highlight. The ring and its halo share this math, so the two never drift. */
+function ringArcs(claims: Layer[], compact: boolean) {
+    const { mid, circumference } = badgeRing(compact);
+    const share = circumference / claims.length;
+    const gap = claims.length > 1 ? RING_GAP : 0;
+
+    return claims.map((layer, index) => ({
+        layer,
+        r: mid,
+        strokeDashoffset: -index * share,
+        strokeDasharray: `${share - gap} ${circumference - share + gap}`,
+    }));
+}
+
 /**
  * One arc per highlight that claims the corner. T17 is an overtaking zone AND a crash-prone
  * corner; a single-colour ring had to pick one and drop the other silently. Claimed by nobody,
  * the ring closes into one quiet circle and the stylesheet's fallback colours it.
  */
-function Ring({ claims, compact }: { claims: Layer[]; compact: boolean }) {
-    const { mid, weight, circumference } = badgeRing(compact);
-    if (!claims.length) {
+function Ring({ compact, arcs }: { compact: boolean; arcs: RingArc[] }) {
+    const { mid, weight } = badgeRing(compact);
+    if (!arcs.length) {
         return <circle className="badge-ring" r={mid} strokeWidth={weight} />;
     }
 
-    const share = circumference / claims.length;
-    const gap = claims.length > 1 ? RING_GAP : 0;
-
     return (
         <>
-            {claims.map((layer, index) => (
+            {arcs.map(({ layer, ...arc }) => (
                 <circle
                     key={layer.id}
                     className="badge-ring"
-                    r={mid}
                     stroke={dyeVar(layer.livery)}
                     strokeWidth={weight}
-                    strokeDasharray={`${share - gap} ${circumference - share + gap}`}
-                    strokeDashoffset={-index * share}
+                    {...arc}
+                />
+            ))}
+        </>
+    );
+}
+
+/** The ring's blurred twin, painted under it, so a claimed corner reads from across the map. */
+function Halo({ compact, arcs }: { compact: boolean; arcs: RingArc[] }) {
+    const { weight } = badgeRing(compact);
+
+    return (
+        <>
+            {arcs.map(({ layer, ...arc }) => (
+                <circle
+                    key={layer.id}
+                    className="badge-halo"
+                    stroke={dyeVar(layer.livery)}
+                    strokeWidth={weight + HALO_EXTRA * 2}
+                    {...arc}
                 />
             ))}
         </>

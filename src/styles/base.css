@@ -54,7 +54,7 @@ body {
     font-variant-numeric: tabular-nums;
 }
 
-/* Arrival without travel: drawers and sheets swap their slide for this fade under reduced motion,
+/* Arrival without travel: sheets swap their slide for this fade under reduced motion,
  * so the state change still reads as something arriving rather than teleporting or not moving. */
 @keyframes fade-in {
     from {

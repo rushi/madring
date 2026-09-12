@@ -35,5 +35,9 @@ Archivo (public/fonts/archivo-text.woff2)
 Copyright 2020 The Archivo Project Authors
 https://github.com/Omnibus-Type/Archivo
 
-Both are licensed under the SIL Open Font License, Version 1.1.
+Saira Condensed (public/fonts/saira-condensed-700.woff2)
+Copyright 2016 The Saira Project Authors
+https://github.com/Omnibus-Type/Saira
+
+All are licensed under the SIL Open Font License, Version 1.1.
 Full text: public/fonts/OFL.txt

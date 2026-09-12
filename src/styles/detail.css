@@ -8,13 +8,11 @@
     transition: grid-template-columns var(--md-cameraMs) ease;
 }
 
-/* Collapsed, the stage is one column and the whole width belongs to the drawing. */
 .stage[data-panel="closed"] {
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
 }
 
-/* The corner opens at the top of the panel, where the eye already is after clicking a plate. */
 .detail {
     background: var(--md-paper-2);
     border: 1px solid var(--md-hair);
@@ -35,13 +33,9 @@
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas:
         "number . close"
-        "title title title";
+        "name name name";
     gap: var(--md-space-2) var(--md-space-3);
     align-items: start;
-}
-
-.detail-title {
-    grid-area: title;
 }
 
 .detail-number {
@@ -54,6 +48,7 @@
 }
 
 .detail-name {
+    grid-area: name;
     margin: 0;
     font-size: var(--md-line-label-size);
     line-height: 1.15;
@@ -62,39 +57,78 @@
 }
 
 .detail-dir {
-    margin: 2px 0 0;
+    margin: var(--md-space-2) 0 0;
     color: var(--md-ink-2);
     font-size: var(--md-map-label-size);
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.12em;
 }
 
+/*
+ * A quiet round target, not a bordered slab: the head is a T-number plate and a name in the sign
+ * face, and a hairline square beside them carries the same weight as both. 28px painted, 44 tapped.
+ */
 .detail-close {
     grid-area: close;
-    background: none;
-    border: 1px solid var(--md-hair);
-    color: var(--md-ink);
+    position: relative;
+    align-self: center;
+    display: grid;
+    place-items: center;
+    inline-size: 28px;
+    block-size: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--md-ink) 10%, transparent);
+    color: var(--md-ink-2);
     cursor: pointer;
-    padding: 2px var(--md-space-2);
+    font-size: var(--md-board-cell-size);
+    line-height: 1;
+    transition:
+        background var(--md-cameraMs) ease,
+        color var(--md-cameraMs) ease;
+}
+
+.detail-close:hover {
+    background: color-mix(in srgb, var(--md-ink) 20%, transparent);
+    color: var(--md-ink);
+}
+
+.detail-close:focus-visible {
+    outline: 2px solid var(--md-red);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .detail-close {
+        transition: none;
+    }
 }
 
 /* One column until there is room for two: a figure and its unit will not share half this panel. */
 .detail-figures {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: var(--md-space-3);
+    gap: var(--md-space-4) var(--md-space-5);
     margin: var(--md-space-4) 0 0;
 }
 
 .figure dt {
     font-size: var(--md-type-min);
+    font-weight: 600;
     color: var(--md-ink-2);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.14em;
 }
 
+/* The figures are the card's numbers, so they take a size of their own rather than the board's
+   cell: at 15px they read as another line of prose between the head and the note. */
 .figure dd {
     margin: 2px 0 0;
-    font-size: var(--md-board-cell-size);
+    font-family: var(--md-detail-figure-family);
+    font-size: var(--md-detail-figure-size);
+    font-weight: var(--md-detail-figure-weight);
+    font-variant-numeric: var(--md-detail-figure-numeric);
 }
 
 .figure-unit {
@@ -103,7 +137,34 @@
 
 .detail-note {
     margin: var(--md-space-4) 0 0;
+    font-size: var(--md-board-cell-size);
     line-height: 1.5;
+}
+
+/* Which lenses claim this corner, in the ink they claim it with: the card and the drawing have to
+   agree, so a lens the visitor switched off leaves no tag behind. */
+.detail-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--md-space-2);
+    margin: var(--md-space-4) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.detail-tag {
+    display: flex;
+    align-items: center;
+    gap: var(--md-space-2);
+    padding: var(--md-space-1) var(--md-space-2);
+    border: 1px solid var(--dye);
+    border-radius: var(--md-space-1);
+    background: color-mix(in srgb, var(--dye) 12%, transparent);
+    color: var(--md-ink);
+    font-size: var(--md-type-min);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 .detail-dispute,
@@ -181,26 +242,74 @@
     white-space: nowrap;
 }
 
-/*
- * Below the wide breakpoint the stage stops being two columns. The map takes the whole of it and
- * the panel slides over the top, because stacking the panel above the map put fifteen switches and
- * a key ahead of the drawing on a phone, and principle 5 says the map is legible before it is
- * interactive. The drawer arrives closed; the masthead toggle is what opens it.
- */
-@media (max-width: 1100px) {
-    .shell {
-        height: 100dvh;
-        overflow: hidden;
+/* The corner sheet's grip is its one dismiss handle: a drag that starts anywhere else belongs to
+ * the scroller, and the layers and menu grips are chrome that must not swallow such a drag. */
+.cornersheet .sheet-grip {
+    touch-action: none;
+}
+
+.cornerwalk {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    margin-block-start: var(--md-space-4);
+    margin-inline: var(--md-space-4);
+    padding-block-start: var(--md-space-1);
+    border-block-start: 1px solid var(--md-hair);
+}
+
+/* One line, clipped: a wrapped neighbour name pushed the walk row to two lines and the position
+   out of the card's centre. The button's aria-label keeps the whole name. */
+.cornerwalk-step {
+    min-inline-size: 0;
+    padding: var(--md-space-2) var(--md-space-3);
+    border: 0;
+    background: none;
+    color: var(--md-ink-2);
+    cursor: pointer;
+    font-size: var(--md-map-label-size);
+    font-weight: 600;
+    text-align: start;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cornerwalk > :last-child {
+    text-align: end;
+}
+
+.cornerwalk-pos {
+    justify-self: center;
+    color: var(--md-ink-2);
+    font-size: var(--md-map-label-size);
+    white-space: nowrap;
+}
+
+@media (pointer: coarse) {
+    .cornerwalk-step {
+        min-block-size: 44px;
     }
 
+    /* The grip is the sheet's dismiss handle, so a finger gets the full-height target: padding
+       grows the band to 44px while the bar itself stays a 4px pill. */
+    .sheet-grip {
+        padding-block: 12px;
+    }
+}
+
+/*
+ * Below the wide breakpoint the stage stops being two columns and bleeds to the edges: the map
+ * takes the whole of it and the chrome arrives over the top, because stacking the panel above the
+ * map put fifteen switches and a key ahead of the drawing on a phone, and principle 5 says the map
+ * is legible before it is interactive. Every sheet arrives closed; the rail and the top bar open
+ * them.
+ */
+@media (max-width: 1100px) {
     .stage {
         grid-template-columns: minmax(0, 1fr);
         gap: 0;
-        padding-inline: var(--md-space-4);
-    }
-
-    .stage[data-panel="open"] {
-        grid-template-columns: minmax(0, 1fr);
+        padding-inline: 0;
     }
 
     .map-frame {
@@ -208,25 +317,89 @@
     }
 
     /*
-     * A sheet on the bottom edge, where a thumb is. It sits above the drawer so a corner picked
-     * with the layers open is still readable, and stops short of the full height so the map it
-     * describes stays in view behind it.
+     * The corner card as a sheet on the bottom edge, where a thumb is. The corner wins
+     * structurally, so no sheet is ever open underneath it, and it stops short of the full
+     * height so the map it describes stays in view behind it.
      */
-    .detail-sheet {
+    .cornersheet {
         grid-area: 1 / 1;
-        position: relative;
         z-index: 4;
         align-self: end;
-        inline-size: 100%;
-        max-block-size: 62%;
+        background: var(--md-paper-2);
+        border-block-start: 1px solid var(--md-hair);
+        border-radius: var(--md-space-4) var(--md-space-4) 0 0;
+        box-shadow: 0 -18px 40px rgb(0 0 0 / 45%);
+        max-block-size: 82%;
         overflow-y: auto;
-        margin-inline: calc(var(--md-space-4) * -1);
-        padding: 0 var(--md-space-4) max(var(--md-space-4), env(safe-area-inset-bottom));
+        padding-block-end: max(var(--md-space-4), env(safe-area-inset-bottom));
         animation: sheet-in var(--md-cameraMs) ease;
     }
 
-    .detail-sheet .detail {
-        box-shadow: 0 -18px 40px rgb(0 0 0 / 45%);
+    /* The sheet is the surface, so the card keeps no frame of its own. The walk row is a sibling
+       with its own top margin, and the card's bottom padding would stack under it. */
+    .cornersheet .detail {
+        border: 0;
+        padding-block-end: 0;
+    }
+
+    /* One line: the stacked head answers the wide panel, where the name has about 95px beside the
+       plate and breaks mid-word. The sheet gives it the viewport, and the dock 215px. */
+    .cornersheet .detail-head {
+        grid-template-areas: "number name close";
+        align-items: baseline;
+    }
+
+    /* Roomy tablet: the card floats bottom-centre, width capped. */
+    @media (min-width: 760px) and (min-height: 600px) {
+        .cornersheet {
+            justify-self: center;
+            inline-size: min(520px, calc(100% - var(--md-space-6)));
+            margin-block-end: var(--md-space-3);
+            border: 1px solid var(--md-hair);
+            border-radius: var(--md-space-4);
+        }
+    }
+
+    /* Short viewport (phone or tablet on its side): dock right, map keeps the rest.
+       Matches App's shortDock query: (height < 600px). */
+    @media (height < 600px) {
+        /* The dock is a column, so the card scrolls inside it rather than as a whole: scrolling the
+           card bodily carried the corner walk off the bottom edge, and the walk is how a visitor
+           tours the lap on the viewport with the least room to tap badges. */
+        .cornersheet {
+            grid-area: 1 / 2;
+            display: flex;
+            flex-direction: column;
+            align-self: stretch;
+            inline-size: 320px;
+            max-block-size: none;
+            overflow: hidden;
+            border-block-start: 0;
+            border-inline-start: 1px solid var(--md-hair);
+            border-radius: 0;
+            animation-name: fade-in;
+        }
+
+        .cornersheet .detail {
+            min-block-size: 0;
+            overflow-y: auto;
+        }
+
+        .cornerwalk {
+            flex: none;
+            background: var(--md-paper-2);
+            padding-block-end: env(safe-area-inset-bottom);
+        }
+
+        /* 320px fits the numbers and the position, not the names as well. */
+        .cornerwalk-name {
+            display: none;
+        }
+
+        /* The grip is the swipe handle; a docked column has nothing to swipe. */
+        .cornersheet .sheet-grip {
+            display: none;
+        }
     }
 
     @keyframes sheet-in {
@@ -242,7 +415,6 @@
         z-index: 2;
         border: 0;
         padding: 0;
-        margin: calc(var(--md-space-4) * -1);
         background: color-mix(in srgb, var(--md-paper) 72%, transparent);
         cursor: pointer;
         animation: scrim-in var(--md-cameraMs) ease;
@@ -256,9 +428,25 @@
 
     /* Motion-sensitive: the sheet fades up rather than travelling. */
     @media (prefers-reduced-motion: reduce) {
-        .detail-sheet {
+        .cornersheet {
             animation-name: fade-in;
         }
+    }
+}
+
+/* The right dock needs the stage to give it a column; the map's ResizeObserver re-fits the lap. */
+@media (max-width: 1100px) {
+    .stage[data-dock] {
+        grid-template-columns: minmax(0, 1fr) 320px;
+    }
+
+    .stage[data-dock] .map-frame {
+        grid-area: 1 / 1;
+    }
+
+    /* The dock spans both rows when the rail is present, so the card runs the stage's full height. */
+    .stage[data-dock] .cornersheet {
+        grid-row: 1 / -1;
     }
 }
 
@@ -266,11 +454,5 @@
 @media (prefers-reduced-motion: reduce) {
     .stage {
         transition: none;
-    }
-}
-
-@media (max-width: 760px) {
-    .stage {
-        padding-inline: var(--md-space-3);
     }
 }

@@ -1,7 +1,15 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import type { CircuitData, Layer, Turn } from "../data/types.ts";
 import { formatLayerParam, parseLayerParam, useCircuitStore } from "../store/useCircuitStore.ts";
-import { allLayers, highlightsAtTurn, knownOverrides, litHighlights, resolveLayers, segmentsFor } from "./resolve.ts";
+import {
+    allLayers,
+    highlightsAtTurn,
+    knownOverrides,
+    layerDefaults,
+    litHighlights,
+    resolveLayers,
+    segmentsFor,
+} from "./resolve.ts";
 
 const overtake = {
     id: "overtake",
@@ -20,11 +28,12 @@ const crash = {
     segmentSets: ["hazard"],
 };
 const grid = { id: "grid", label: "Grid", default: false };
+const notes = { id: "notes", label: "Notes", default: true, compactDefault: false };
 
 const data = {
     layerGroups: [
         { id: "highlights", label: "Highlights", layers: [overtake, crash] },
-        { id: "scenery", label: "Scenery", layers: [grid] },
+        { id: "scenery", label: "Scenery", layers: [grid, notes] },
     ],
     segments: [
         { id: "braking.t1", set: "braking" },
@@ -36,7 +45,7 @@ const turn = { n: 1, flags: { overtaking: true, crashProne: false, banked: false
 
 describe("layer state", () => {
     it("gives every layer in content an answer", () => {
-        expect(resolveLayers(data, {})).toEqual({ overtake: true, crash: false, grid: false });
+        expect(resolveLayers(data, {})).toEqual({ overtake: true, crash: false, grid: false, notes: true });
     });
 
     it("lets a visitor's switch beat the authored default in both directions", () => {
@@ -44,6 +53,7 @@ describe("layer state", () => {
             overtake: false,
             crash: false,
             grid: true,
+            notes: true,
         });
     });
 
@@ -52,7 +62,7 @@ describe("layer state", () => {
     });
 
     it("flattens groups in authoring order, so stacked ink is predictable", () => {
-        expect(allLayers(data).map((layer) => layer.id)).toEqual(["overtake", "crash", "grid"]);
+        expect(allLayers(data).map((layer) => layer.id)).toEqual(["overtake", "crash", "grid", "notes"]);
     });
 });
 
@@ -166,5 +176,23 @@ describe("picking a corner", () => {
         store().selectTurn(7);
         store().selectTurn(undefined);
         expect(store().turn).toBeUndefined();
+    });
+});
+
+describe("compact defaults", () => {
+    it("follows the compact default when compact and untouched", () => {
+        expect(resolveLayers(data, {}, true).notes).toBe(false);
+    });
+
+    it("follows the desktop default when wide", () => {
+        expect(resolveLayers(data, {}, false).notes).toBe(true);
+    });
+
+    it("an override beats either default", () => {
+        expect(resolveLayers(data, { notes: true }, true).notes).toBe(true);
+    });
+
+    it("layerDefaults mirrors resolution without overrides", () => {
+        expect(layerDefaults(data, true)).toEqual(resolveLayers(data, {}, true));
     });
 });

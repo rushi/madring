@@ -55,6 +55,10 @@
       "family": "Archivo",
       "stack": "\"Archivo\", \"Archivo Fallback\", system-ui, sans-serif"
     },
+    "signCompact": {
+      "family": "Saira Condensed",
+      "stack": "\"Saira Condensed\", \"Anybody\", \"Anybody Fallback\", \"Archivo\", system-ui, sans-serif"
+    },
     "minPx": 12,
     "roles": {
       "masthead": {
@@ -98,6 +102,12 @@
       "board-cell": {
         "face": "text",
         "px": 15,
+        "wght": 500,
+        "numeric": "tabular-nums"
+      },
+      "detail-figure": {
+        "face": "text",
+        "px": 19,
         "wght": 500,
         "numeric": "tabular-nums"
       },

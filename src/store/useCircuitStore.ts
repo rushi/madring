@@ -4,6 +4,8 @@ import { readTheme, THEME_KEY } from "../data/theme.ts";
 import type { Theme } from "../data/theme.ts";
 import type { LayerState } from "../data/types.ts";
 
+export type SheetKind = "layers" | "menu";
+
 export interface CircuitState {
     /**
      * Only the layers the visitor has touched. Everything else follows the default in content, so
@@ -15,12 +17,17 @@ export interface CircuitState {
     theme: Theme;
     /** Closed gives the whole stage to the map. */
     panelOpen: boolean;
+    /** Which sheet is up on an overlay viewport. Corner detail is `turn`, not a sheet. */
+    sheet?: SheetKind;
     setUnits: (units: Units) => void;
     setTheme: (theme: Theme) => void;
     togglePanel: () => void;
+    openSheet: (sheet: SheetKind) => void;
+    closeSheet: () => void;
     setLayer: (id: string, on: boolean, matchesDefault: boolean) => void;
     resetLayers: () => void;
     selectTurn: (turn?: number) => void;
+    walkTurn: (turn: number) => void;
 }
 
 /**
@@ -39,11 +46,7 @@ export const PANEL_OVERLAY_MAX = 1100;
  */
 function openingPanel(wide: number) {
     const asked = arrival.get("panel");
-    if (asked) {
-        return asked !== "off";
-    }
-
-    return !globalThis.matchMedia?.(`(max-width: ${wide}px)`).matches;
+    return asked ? asked !== "off" : !globalThis.matchMedia?.(`(max-width: ${wide}px)`).matches;
 }
 
 /**
@@ -98,6 +101,7 @@ export const useCircuitStore = create<CircuitState>((set) => ({
     units: openingUnits(),
     theme: openingTheme(),
     panelOpen: openingPanel(PANEL_OVERLAY_MAX),
+    sheet: undefined,
     setUnits: (units) => set({ units }),
     setTheme: (theme) => {
         try {
@@ -109,6 +113,9 @@ export const useCircuitStore = create<CircuitState>((set) => ({
         set({ theme });
     },
     togglePanel: () => set((state) => ({ panelOpen: !state.panelOpen })),
+    /* A sheet and an open corner never share the overlay: the sheet answers what was asked last. */
+    openSheet: (sheet) => set({ sheet, turn: undefined }),
+    closeSheet: () => set({ sheet: undefined }),
     setLayer: (id, on, matchesDefault) =>
         set((state) => {
             /* Switching a layer back to what content asks for drops it from the link entirely. */
@@ -117,6 +124,9 @@ export const useCircuitStore = create<CircuitState>((set) => ({
             return { layerOverrides: overrides };
         }),
     resetLayers: () => set({ layerOverrides: {} }),
-    /* Picking the corner that is already open closes it: the badge is the switch for its own panel. */
-    selectTurn: (turn) => set((state) => ({ turn: state.turn === turn ? undefined : turn })),
+    /* Picking the corner that is already open closes it: the badge is the switch for its own panel.
+       A pick made from a sheet closes the sheet with it: the corner wins. */
+    selectTurn: (turn) => set((state) => ({ turn: state.turn === turn ? undefined : turn, sheet: undefined })),
+    /* Walking never toggles closed, and the corner wins over any sheet the same way a pick does. */
+    walkTurn: (turn) => set({ turn, sheet: undefined }),
 }));

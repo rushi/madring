@@ -9,13 +9,37 @@ export interface LitLayer {
     segments: Segment[];
 }
 
+/*
+ * The dyed kerb holds a constant screen weight, the way labels do: at a phone's scale a
+ * drawing-unit kerb comes out near a pixel, so it counter-scales by `counter`. 3.5 a side
+ * reproduces the 20-unit edge at scale 1, which is also the floor it never narrows past.
+ */
+const KERB_PX = 3.5;
+/** Drawing units of asphalt the dye flanks. Must mirror .track-asphalt and .run-asphalt in map.css. */
+const ASPHALT_UNITS = 13;
+
+/*
+ * Two passes of light under a lit run, in paint order. The tight one is the neon: a little wider
+ * than the road, bright, barely blurred. The wide one is the falloff: four road-widths out and
+ * faint, so it reads as air around the light rather than a second marking. Drawing units, never
+ * counter-scaled: light hugs the road in proportion to the road, or a tight corner's halo detaches
+ * into a cloud beside it. Track edge is 20 units; scale accordingly.
+ */
+const GLOW_PASSES = [
+    { blur: 14, width: 76, opacity: 0.16, id: "run-glow-wide" },
+    { blur: 5, width: 30, opacity: 0.55, id: "run-glow" },
+];
+
 /**
  * A highlight is the road re-kerbed, not a stripe laid over it: the stretch takes the layer's dye
  * on its edge line and the asphalt is drawn back on top, so the surface stays a surface and the
  * colour reads as a marking beside it. Every run is cut out of the lap's own `d` by dash
  * arithmetic, which is why a dyed stretch can never drift out of register with the track.
  */
-export const HighlightRuns = memo(function HighlightRuns({ pathD, totalPx, geometry, lit }: Props) {
+export const HighlightRuns = memo(function HighlightRuns({ pathD, totalPx, geometry, counter, lit }: RunProps) {
+    /* Floored at the unscaled kerb: `fitLap` clamps scale only below, so a frame roomy on both axes
+       solves above 1, and counter-scaling alone then narrows the dye inside the road's light edge. */
+    const kerbed = ASPHALT_UNITS + 2 * Math.max(KERB_PX * counter, KERB_PX);
     return (
         <g className="runs" aria-hidden="true">
             <defs>
@@ -39,7 +63,13 @@ export const HighlightRuns = memo(function HighlightRuns({ pathD, totalPx, geome
 
                         return (
                             <g key={segment.id}>
-                                <path className="run-edge" d={pathD} stroke={dyeVar(layer.livery)} {...dash} />
+                                <path
+                                    className="run-edge"
+                                    d={pathD}
+                                    stroke={dyeVar(layer.livery)}
+                                    strokeWidth={kerbed}
+                                    {...dash}
+                                />
                                 <path className="run-asphalt" d={pathD} {...dash} />
                                 {layer.fill && layer.fill !== "solid" && (
                                     <path
@@ -58,9 +88,15 @@ export const HighlightRuns = memo(function HighlightRuns({ pathD, totalPx, geome
     );
 });
 
-/** The same stretch at a heavier weight and blurred, under the road: it says "near here" before the detail does. */
-export const HighlightGlow = memo(function HighlightGlow({ pathD, totalPx, geometry, lit }: Props) {
-    const glowing = lit.filter(({ layer }) => layer.glow);
+/** The same stretch blurred, under the road: it says "near here" before the detail does. */
+export const HighlightGlow = memo(function HighlightGlow({ pathD, totalPx, geometry, lit }: GlowProps) {
+    /* Cut each stretch once, not once per blur pass: the dash geometry is the same at every width. */
+    const glowing = lit
+        .filter(({ layer }) => layer.glow)
+        .map(({ layer, segments }) => {
+            const dashes = segments.map((segment) => ({ id: segment.id, dash: dashFor(geometry, totalPx, segment) }));
+            return { layer, dashes };
+        });
     if (!glowing.length) {
         return null;
     }
@@ -68,29 +104,33 @@ export const HighlightGlow = memo(function HighlightGlow({ pathD, totalPx, geome
     return (
         <g className="glow" aria-hidden="true">
             <defs>
-                <filter id="run-glow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="7" />
-                </filter>
+                {GLOW_PASSES.map((pass) => (
+                    <filter key={pass.id} id={pass.id} x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation={pass.blur} />
+                    </filter>
+                ))}
             </defs>
 
-            {glowing.map(({ layer, segments }) => (
-                <g key={layer.id} filter="url(#run-glow)">
-                    {segments.map((segment) => {
-                        const dash = dashFor(geometry, totalPx, segment);
-                        return (
-                            dash && (
-                                <path
-                                    key={segment.id}
-                                    className="run-glow"
-                                    d={pathD}
-                                    stroke={dyeVar(layer.livery)}
-                                    {...dash}
-                                />
-                            )
-                        );
-                    })}
-                </g>
-            ))}
+            {GLOW_PASSES.map((pass) => {
+                return glowing.map(({ layer, dashes }) => (
+                    <g key={`${pass.id}-${layer.id}`} filter={`url(#${pass.id})`}>
+                        {dashes.map(
+                            ({ id, dash }) =>
+                                dash && (
+                                    <path
+                                        key={id}
+                                        className="run-glow"
+                                        d={pathD}
+                                        stroke={dyeVar(layer.livery)}
+                                        strokeWidth={pass.width}
+                                        strokeOpacity={pass.opacity}
+                                        {...dash}
+                                    />
+                                ),
+                        )}
+                    </g>
+                ));
+            })}
         </g>
     );
 });
@@ -147,9 +187,14 @@ function Texture({ id, fill, dye }: { id: string; fill: Fill; dye: string }) {
     );
 }
 
-interface Props {
+interface GlowProps {
     pathD: string;
     totalPx: number;
     geometry: Geometry;
     lit: LitLayer[];
+}
+
+interface RunProps extends GlowProps {
+    /** 1/scale: turns the screen-px kerb back into drawing units. */
+    counter: number;
 }

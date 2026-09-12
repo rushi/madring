@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { geometryFileSchema, layerGroupSchema, segmentSchema } from "./index.ts";
+import { geometryFileSchema, layerGroupSchema, layerSchema, segmentSchema, turnsFileSchema } from "./index.ts";
 
 const segment = { id: "hazard.x", set: "hazard", turn: 12, label: "T12", t0: 0.4, t1: 0.5 } as const;
 
@@ -44,6 +44,26 @@ describe("layer groups", () => {
     it("rejects a fill no texture is built for", () => {
         const layers = [{ ...group.layers[0], fill: "tartan" }];
         expect(layerGroupSchema.safeParse({ ...group, layers }).success).toBe(false);
+    });
+});
+
+describe("layers", () => {
+    it("keeps an optional compact default on a layer", () => {
+        const layer = { id: "notes", label: "Speed notes", default: true, compactDefault: false };
+        expect(layerSchema.parse(layer).compactDefault).toBe(false);
+    });
+});
+
+describe("turns", () => {
+    it("parses the real content/turns.json", () => {
+        const file = JSON.parse(readFileSync(new URL("../turns.json", import.meta.url), "utf8"));
+        expect(turnsFileSchema.safeParse(file).success).toBe(true);
+    });
+
+    it("rejects turns out of lap order, which index walks and run derivation would misread", () => {
+        const file = JSON.parse(readFileSync(new URL("../turns.json", import.meta.url), "utf8"));
+        [file.turns[3], file.turns[4]] = [file.turns[4], file.turns[3]];
+        expect(turnsFileSchema.safeParse(file).success).toBe(false);
     });
 });
 

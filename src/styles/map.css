@@ -85,9 +85,10 @@
 }
 
 /*
- * Below the wide breakpoint the real panel is a drawer over the map and the stage is one column, so
- * the stand-in's placeholder column goes. In CSS rather than in the seed's own script: changing the
- * column count from script shifts a stage the browser has already laid out and painted.
+ * Below the wide breakpoint the real stage is one column with no panel in it (the overlay shell
+ * hosts sheets instead), so the stand-in's placeholder column goes. In CSS rather than in the
+ * seed's own script: changing the column count from script shifts a stage the browser has already
+ * laid out and painted.
  */
 @media (max-width: 1100px) {
     #lap-seed .panel {
@@ -135,9 +136,9 @@
     stroke-linecap: round;
 }
 
+/* Width is inline and counter-scaled: the dyed kerb holds a constant screen weight at any zoom. */
 .run-edge {
     fill: none;
-    stroke-width: 20;
     stroke-opacity: 0.95;
     stroke-linecap: butt;
 }
@@ -159,11 +160,10 @@
  * The only soft edge on the surface. It says "near here", where the kerb says "exactly here".
  * Butt caps because runs abut: T17's braking zone ends on the exact t its hazard begins, and two
  * round caps there spill past the join and composite green over red into mud.
+ * Width and opacity are inline, two passes per run: a tight bright one and a wide faint one.
  */
 .run-glow {
     fill: none;
-    stroke-width: 40;
-    stroke-opacity: 0.3;
     stroke-linecap: butt;
 }
 
@@ -328,6 +328,14 @@
     stroke: var(--mark);
 }
 
+/* The ring's blurred twin under it: how a claimed corner reads from across the map. Decorative. */
+.badge-halo {
+    fill: none;
+    stroke-opacity: 0.5;
+    filter: url(#badge-halo);
+    pointer-events: none;
+}
+
 .badge-face {
     fill: var(--md-badge-face);
     stroke: var(--md-paper);
@@ -408,6 +416,12 @@
     stroke: var(--md-ink);
 }
 
+/* Selection borrows no hue: the dye aureole goes while the badge is inverted. */
+.tick-badge:focus-visible .badge-halo,
+.tick.is-selected .badge-halo {
+    display: none;
+}
+
 .tick.is-selected .badge-face {
     fill: var(--md-paper);
     stroke: var(--md-ink);
@@ -477,31 +491,59 @@
     font-weight: var(--md-map-label-weight);
 }
 
-@media (max-width: 1100px) {
-    /*
-     * Too narrow for three columns: the standfirst drops to its own row under the name. The rows
-     * are placed by hand because auto-placement pushed the controls below the standfirst, which
-     * left them stranded mid-page instead of beside the name they belong with.
-     */
-    .masthead-bar {
-        grid-template-columns: minmax(0, 1fr) auto;
-    }
+.floatkey {
+    position: absolute;
+    inset-block-start: var(--md-space-3);
+    inset-inline-start: var(--md-space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--md-space-1);
+    pointer-events: none;
+}
 
-    .masthead-name {
-        grid-area: 1 / 1;
-    }
+/* Plated, like every other map label: bare 12px is unreadable over the hatch. */
+.floatkey-row {
+    display: flex;
+    align-items: center;
+    gap: var(--md-space-2);
+    inline-size: max-content;
+    padding: var(--md-space-1) var(--md-space-2);
+    background: var(--md-paper);
+    border: 1px solid var(--md-paper-2);
+    border-radius: var(--md-space-1);
+    font-size: var(--md-type-min);
+    font-weight: 600;
+    color: var(--md-ink);
+}
 
-    .masthead-controls {
-        grid-area: 1 / 2;
-    }
-
-    .site-headline {
-        grid-area: 2 / 1 / 3 / -1;
-        max-inline-size: 70ch;
+/*
+ * Short viewports give the key no honest home: it is HTML over an SVG the solver places labels
+ * for, and at this height its column lands on plated labels like START / FINISH. The rail's
+ * chips and the layers sheet carry the same swatches, so the key steps aside rather than cover.
+ */
+@media (height < 600px) {
+    .floatkey {
+        display: none;
     }
 }
 
-/* Landscape on a phone: 390px of height, and the masthead was taking half of it. */
+/*
+ * Below the wide breakpoint the overlay shell renders a top bar instead of the masthead, so the
+ * masthead leaves the layout entirely. The rule still matters before hydration: the lap-seed
+ * carries the wide shell's markup, and this keeps a phone's first frame on the lap rather than
+ * on a masthead the real page is about to drop.
+ */
+@media (max-width: 1100px) {
+    .masthead-bar {
+        display: none;
+    }
+}
+
+/* A short window: the masthead only exists on the wide shell now, and there it can still take
+   half of a squat desktop window. The lap keeps the height. */
 @media (max-height: 520px) {
     .site-headline {
         display: none;
@@ -518,44 +560,5 @@
 
     .site-question {
         display: none;
-    }
-}
-
-@media (max-width: 760px) {
-    /* One column: at 375px the wordmark and the controls cannot share a row without colliding.
-       Rows pack tight: every pixel the masthead spends here is charged against the lap. */
-    .masthead-bar {
-        grid-template-columns: minmax(0, 1fr);
-        gap: var(--md-space-2);
-        padding-inline: var(--md-space-4);
-        padding-block: var(--md-space-2);
-    }
-
-    .masthead-bar .masthead {
-        font-size: clamp(26px, 7vw, 32px);
-    }
-
-    .masthead-name,
-    .masthead-controls,
-    .site-headline {
-        grid-area: auto;
-    }
-
-    /* The standfirst is the first thing to go: the lap is what a cold visitor came for. */
-    .site-headline {
-        font-size: var(--md-map-label-size);
-        line-height: 1.4;
-    }
-
-    /* Three groups of controls wrapped to a second row here, and a phone's masthead is charged
-       against the map. Tighter buttons hold them on one line without touching the tap target. */
-    .masthead-controls {
-        justify-content: flex-start;
-        gap: var(--md-space-2);
-    }
-
-    .masthead-controls .unit,
-    .masthead-controls .panel-toggle {
-        padding-inline: var(--md-space-2);
     }
 }

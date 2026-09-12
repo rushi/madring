@@ -35,4 +35,9 @@ describe("generated tokens", () => {
             expect(declaredValue(name), name).toBe(`${theme.motion[name]}ms`);
         }
     });
+
+    it("overrides the sign-role families inside the compact media query", () => {
+        expect(css).toContain("@media (width < 560px), (height < 560px)");
+        expect(css).toContain('--md-masthead-family: "Saira Condensed"');
+    });
 });

@@ -108,7 +108,7 @@ export const CircuitMap = memo(function CircuitMap(props: Props) {
 
                 <HighlightGlow pathD={pathD} totalPx={totalPx} geometry={geometry} lit={flooded} />
                 <TrackLine pathD={pathD} />
-                <HighlightRuns pathD={pathD} totalPx={totalPx} geometry={geometry} lit={flooded} />
+                <HighlightRuns pathD={pathD} totalPx={totalPx} geometry={geometry} counter={counter} lit={flooded} />
 
                 {state.straights && (
                     <StraightLabels

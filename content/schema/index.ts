@@ -53,7 +53,10 @@ export const turnSchema = z.object({
     quotes: z.array(z.object({ text: z.string(), who: z.string(), source: z.string() })),
 });
 
-export const turnsFileSchema = z.object({ schemaVersion: version, turns: z.array(turnSchema).length(22) });
+export const turnsFileSchema = z
+    .object({ schemaVersion: version, turns: z.array(turnSchema).length(22) })
+    /* CornerSheet walks neighbours by index and ingest derives named runs in file order: position is n. */
+    .refine((file) => file.turns.every((turn, at) => turn.n === at + 1), { message: "turns are not in lap order" });
 
 export const segmentSetSchema = z.enum(["braking", "hazard", "banked", "elevation", "straightMode", "overtakeMode"]);
 
@@ -176,6 +179,10 @@ export const layerSchema = z.object({
     id: z.string(),
     label: z.string(),
     default: z.boolean(),
+    /** What a compact viewport opens with. Absent means the same as `default`. */
+    compactDefault: z.boolean().optional(),
+    /** The rail chip's label, where the full one would push its neighbours off a phone. */
+    short: z.string().optional(),
     livery: z.string().optional(),
     fill: fillSchema.optional(),
     glow: z.boolean().optional(),
@@ -223,6 +230,7 @@ export const themeFileSchema = z.object({
     type: z.object({
         sign: z.object({ family: z.string(), stack: z.string(), wdthMin: z.number(), wdthMax: z.number() }),
         text: z.object({ family: z.string(), stack: z.string() }),
+        signCompact: z.object({ family: z.string(), stack: z.string() }).optional(),
         minPx: z.number(),
         roles: z.record(z.string(), typeRoleSchema),
     }),

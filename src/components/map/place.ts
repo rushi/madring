@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Geometry } from "../../data/geometry.ts";
 import { offsetPoint, tangentAt } from "../../data/geometry.ts";
 
@@ -65,6 +66,9 @@ const degreesAt = (geometry: Geometry, t: number) => (tangentAt(geometry, t) * 1
 
 /** A layer's dye as a custom property. One spelling, so renaming a livery is one edit. */
 export const dyeVar = (livery = "ink") => `var(--md-${livery})`;
+
+/** The same dye as an inline style, for the HTML surfaces that pass it down through `--dye`. */
+export const dyeStyle = (livery?: string) => ({ "--dye": dyeVar(livery) }) as CSSProperties;
 
 /**
  * The width a plate needs for a string at a given size. SVG cannot measure text before it paints,

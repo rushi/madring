@@ -8,7 +8,9 @@
         {
           "id": "overtake",
           "label": "Overtaking zones",
+          "short": "Overtaking",
           "default": true,
+          "compactDefault": true,
           "livery": "hl-overtake",
           "fill": "solid",
           "glow": true,
@@ -18,7 +20,9 @@
         {
           "id": "crash",
           "label": "Crash-prone corners",
+          "short": "Crash-prone",
           "default": true,
+          "compactDefault": true,
           "livery": "hl-crash",
           "fill": "stipple",
           "glow": true,
@@ -28,7 +32,9 @@
         {
           "id": "banked",
           "label": "La Monumental banking",
+          "short": "Banking",
           "default": true,
+          "compactDefault": true,
           "livery": "hl-banked",
           "fill": "hatch45",
           "glow": true,
@@ -38,7 +44,9 @@
         {
           "id": "aero",
           "label": "Straight and Overtake Mode",
+          "short": "Aero modes",
           "default": false,
+          "compactDefault": false,
           "livery": "hl-aero",
           "fill": "dashed",
           "glow": false,
@@ -47,7 +55,9 @@
         {
           "id": "gradient",
           "label": "Climb and descent",
+          "short": "Gradient",
           "default": false,
+          "compactDefault": false,
           "livery": "hl-gradient",
           "fill": "chevron",
           "glow": false,
@@ -59,22 +69,22 @@
       "id": "labels",
       "label": "Labels",
       "layers": [
-        { "id": "names", "label": "Corner names", "default": false },
-        { "id": "notes", "label": "Speed notes", "default": true },
-        { "id": "tags", "label": "L / R tags", "default": false },
-        { "id": "straights", "label": "Straights", "default": true }
+        { "id": "names", "label": "Corner names", "default": false, "compactDefault": false },
+        { "id": "notes", "label": "Speed notes", "default": true, "compactDefault": false },
+        { "id": "tags", "label": "L / R tags", "default": false, "compactDefault": false },
+        { "id": "straights", "label": "Straights", "default": true, "compactDefault": false }
       ]
     },
     {
       "id": "scenery",
       "label": "Scenery",
       "layers": [
-        { "id": "paddock", "label": "Pit lane & paddock", "default": true, "livery": "pit" },
-        { "id": "tunnels", "label": "Tunnels", "default": true, "livery": "tunnel" },
-        { "id": "sections", "label": "Section names", "default": true },
-        { "id": "startfinish", "label": "Start / finish", "default": true },
-        { "id": "legend", "label": "Key", "default": true },
-        { "id": "grid", "label": "Dot grid", "default": false }
+        { "id": "paddock", "label": "Pit lane & paddock", "default": true, "compactDefault": false, "livery": "pit" },
+        { "id": "tunnels", "label": "Tunnels", "default": true, "compactDefault": false, "livery": "tunnel" },
+        { "id": "sections", "label": "Section names", "default": true, "compactDefault": false },
+        { "id": "startfinish", "label": "Start / finish", "default": true, "compactDefault": false },
+        { "id": "legend", "label": "Key", "default": true, "compactDefault": true },
+        { "id": "grid", "label": "Dot grid", "default": false, "compactDefault": false }
       ]
     }
   ]

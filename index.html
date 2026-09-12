@@ -12,6 +12,14 @@
              stops changing shape is the faces that text is set in, not the bundle behind it. -->
         <link rel="preload" href="%BASE_URL%fonts/anybody-sign.woff2" as="font" type="font/woff2" crossorigin />
         <link rel="preload" href="%BASE_URL%fonts/archivo-text.woff2" as="font" type="font/woff2" crossorigin />
+        <link
+            rel="preload"
+            href="%BASE_URL%fonts/saira-condensed-700.woff2"
+            as="font"
+            type="font/woff2"
+            media="(width < 560px), (height < 560px)"
+            crossorigin
+        />
         <!--data-preload-->
         <!--analytics-->
         <style>
@@ -28,6 +36,12 @@
                 font-family: "Archivo";
                 src: url("%BASE_URL%fonts/archivo-text.woff2") format("woff2-variations");
                 font-weight: 100 900;
+                font-display: swap;
+            }
+            @font-face {
+                font-family: "Saira Condensed";
+                src: url("%BASE_URL%fonts/saira-condensed-700.woff2") format("woff2");
+                font-weight: 700;
                 font-display: swap;
             }
             /*

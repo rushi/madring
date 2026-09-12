@@ -125,12 +125,16 @@
     letter-spacing: 0.06em;
 }
 
-.panel-reset:hover {
+.panel-reset:hover:not(:disabled) {
     color: var(--md-ink);
     border-color: var(--md-ink);
 }
 
-/* Beside the map, never over it: a key pinned to an edge covers the corners nearest that edge. */
+.panel-reset:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
 .legend-list {
     margin: 0;
     padding: 0;
@@ -236,54 +240,6 @@
 }
 
 /*
- * The drawer. It sits in the stage's single cell above the map, scrolls on its own, and stops at a
- * readable measure rather than stretching to a tablet's full width. Safe-area insets because it
- * reaches the bottom edge on a phone, where the home indicator lives.
- */
-@media (max-width: 1100px) {
-    .panel {
-        grid-area: 1 / 1;
-        position: relative;
-        z-index: 3;
-        inline-size: min(340px, 88vw);
-        padding: var(--md-space-4);
-        padding-block-end: max(var(--md-space-4), env(safe-area-inset-bottom));
-        padding-inline-start: max(var(--md-space-4), env(safe-area-inset-left));
-        margin-inline-start: calc(var(--md-space-4) * -1);
-        background: var(--md-paper);
-        border-inline-end: 1px solid var(--md-hair);
-        box-shadow: 0 0 40px rgb(0 0 0 / 45%);
-        animation: drawer-in var(--md-cameraMs) ease;
-    }
-
-    @keyframes drawer-in {
-        from {
-            transform: translateX(-100%);
-        }
-    }
-
-    /* Motion-sensitive: the drawer still announces itself, just without the travel. */
-    @media (prefers-reduced-motion: reduce) {
-        .panel {
-            animation-name: fade-in;
-        }
-    }
-
-    .switches {
-        display: flex;
-        flex-direction: column;
-        gap: var(--md-space-5);
-    }
-}
-
-@media (max-width: 760px) {
-    .panel {
-        inline-size: min(320px, 86vw);
-        margin-inline-start: calc(var(--md-space-3) * -1);
-    }
-}
-
-/*
  * Touch, not screen size: a laptop with a touchscreen needs the same target a phone does. 44px is
  * the floor for a finger, and the label is part of the target because the box alone is 15px.
  */
@@ -299,17 +255,422 @@
 
     .corner-key-row {
         min-block-size: 44px;
-    }
-
-    .panel-toggle,
-    .unit {
-        min-block-size: 44px;
-        display: inline-flex;
+        display: flex;
         align-items: center;
     }
 
-    .detail-close {
+    /* Padding and a floor, not flex: a summary laid out as a flex box loses its native disclosure
+       marker, and these two rows sit under group heads that carry one. */
+    .provenance summary {
+        min-block-size: 44px;
+        padding-block: var(--md-space-3);
+    }
+
+    .panel-toggle,
+    .unit,
+    .panel-reset {
         min-inline-size: 44px;
         min-block-size: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /*
+     * Painted small, tapped at 44px: a control sized to the finger fills the chrome it sits in, so
+     * this box overflows the painted one to carry the target instead. Width defaults to the
+     * element's own, keeping two segments of a pill out of each other; squares opt into 44 below.
+     */
+    .topbar .unit::after,
+    .topbar-menu::after,
+    .lenschip::after,
+    .detail-close::after {
+        content: "";
+        position: absolute;
+        inset-block-start: 50%;
+        inset-inline-start: 50%;
+        min-inline-size: 100%;
+        block-size: 44px;
+        transform: translate(-50%, -50%);
+    }
+
+    .topbar-menu::after,
+    .detail-close::after {
+        min-inline-size: 44px;
+    }
+}
+
+/* The overlay-viewport chrome: it stands in for the masthead below the wide breakpoint. */
+.topbar {
+    display: flex;
+    align-items: center;
+    gap: var(--md-space-2);
+    block-size: 48px;
+    padding-inline: var(--md-space-4) var(--md-space-3);
+    border-block-end: 1px solid var(--md-paper-2);
+}
+
+.topbar-name {
+    font-size: 23px;
+    /* The compact sign stack ships only 700; without this the name computes 400 and borrows the
+       face's nearest weight instead of stating its own. */
+    font-weight: var(--md-line-label-weight);
+}
+
+/* A boxed button, not a bare glyph: the ☰ is the only icon in the bar, and an unboxed icon reads
+   as decoration. `font-size: inherit` alone, never `font: inherit`, which would strip .sign. */
+.topbar-menu {
+    display: grid;
+    place-items: center;
+    min-inline-size: 0;
+    min-block-size: 0;
+    inline-size: 36px;
+    block-size: 36px;
+    padding: 0;
+    border: 1px solid var(--md-hair);
+    border-radius: var(--md-space-1);
+    background: none;
+    color: var(--md-ink);
+    cursor: pointer;
+    font-size: inherit;
+}
+
+/*
+ * The bar's controls are sized to the bar, not to the finger: at a 44px painted box the pill and
+ * the menu button fill a 48px bar edge to edge and the row reads as three slabs. The target is
+ * kept at 44px by a box that overflows the painted one, which is what a finger actually hits.
+ * The pill grows only downward and upward: two segments each claiming 44px of width would each
+ * reach into the other, and the far segment would win the overlap.
+ */
+.topbar .unit,
+.topbar-menu {
+    position: relative;
+}
+
+/* Sized to the bar: a 28px pill under a 23px wordmark, not a second 44px slab beside it. */
+.topbar .unit {
+    min-inline-size: 0;
+    min-block-size: 0;
+    block-size: 28px;
+    padding-block: 0;
+    padding-inline: var(--md-space-2);
+}
+
+/* The unit pill rounds at its ends in the bar, the way the mock reads it. */
+.topbar .unit:first-of-type {
+    border-start-start-radius: var(--md-space-1);
+    border-end-start-radius: var(--md-space-1);
+}
+
+.topbar .unit:last-of-type {
+    border-start-end-radius: var(--md-space-1);
+    border-end-end-radius: var(--md-space-1);
+}
+
+.topbar-gap {
+    flex: 1;
+}
+
+.sheet {
+    background: var(--md-paper-2);
+    border-block-start: 1px solid var(--md-hair);
+    border-radius: var(--md-space-4) var(--md-space-4) 0 0;
+    max-block-size: 82%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Programmatic focus lands on the sheet; the corner card's `.detail` already hides the same ring. */
+.sheet:focus {
+    outline: none;
+}
+
+.sheet-grip::before {
+    content: "";
+    display: block;
+    inline-size: 36px;
+    block-size: 4px;
+    margin: var(--md-space-2) auto;
+    border-radius: 2px;
+    background: var(--md-hair);
+}
+
+/* overflow-y over overflow-block: Baseline 2023 leaves older iOS without the scroll, and
+ * min-block-size zeroes the flex automatic minimum so the body can shrink below its content. */
+.sheet-body {
+    min-block-size: 0;
+    overflow-y: auto;
+    padding: 0 var(--md-space-4) max(var(--md-space-4), env(safe-area-inset-bottom));
+}
+
+.layers-sheet .sheet-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--md-space-5);
+}
+
+.menu-sheet .sheet-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--md-space-5);
+}
+
+/* The masthead's headline, carried into the menu: same measure, same ink. */
+.menu-headline {
+    max-inline-size: 84ch;
+    margin: 0;
+    color: var(--md-ink-2);
+}
+
+/* Inside a disclosure the paragraph is the answer to the summary, so it indents under it and drops
+   to the same quiet size as the sources list beside it. */
+.layers-sheet .menu-headline,
+.layers-sheet .menu-note {
+    font-size: var(--md-map-label-size);
+    line-height: 1.5;
+}
+
+.layers-sheet .menu-headline {
+    margin-block-start: var(--md-space-2);
+}
+
+.layers-sheet .menu-note {
+    color: var(--md-ink-2);
+}
+
+/* The flex gap owns the rhythm; default block margins would double it. */
+.menu-sheet .panel-head,
+.menu-note {
+    margin: 0;
+}
+
+/*
+ * The sheet's group head is a button wearing the legend's voice: panel-head and sign keep the
+ * type, and the button adds the full-width row, the tap target, and the counter that says how
+ * much of the group is on.
+ */
+.grouphead-button {
+    inline-size: 100%;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--md-space-3);
+    min-block-size: 44px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.grouphead-button:focus-visible {
+    outline: 2px solid var(--md-red);
+    outline-offset: 2px;
+}
+
+.grouphead-label {
+    color: var(--md-ink);
+}
+
+/* A collapsed group has to say it opens: the counter alone reads as a statistic, not a control. */
+.grouphead-button .grouphead-label::after {
+    content: " ▾";
+    color: var(--md-ink-2);
+}
+
+.grouphead-button[aria-expanded="true"] .grouphead-label::after {
+    content: " ▴";
+}
+
+/* z-index 3: the scrim sits at 2 and would otherwise paint over the sheet, making every
+   switch in it pointer-dead. The corner sheet keeps the higher 4 it has today.
+   Placement is the stage grid (the .cornersheet pattern), not absolute: .stage is not a
+   positioning context, so absolute sheets would anchor to the viewport. */
+@media (max-width: 1100px) {
+    .sheet {
+        grid-area: 1 / 1;
+        align-self: end;
+        z-index: 3;
+        animation: sheet-in var(--md-cameraMs) ease;
+    }
+
+    /* Motion-sensitive: the sheet fades up rather than travelling. */
+    @media (prefers-reduced-motion: reduce) {
+        .sheet {
+            animation-name: fade-in;
+        }
+    }
+}
+
+/*
+ * Below 1100px every current stage child is pinned to grid-area 1/1, so an unpinned rail would
+ * create a second implicit row and stretch would split the stage height between map and rail.
+ * Name the rows: the rail reserves its own space and the map re-fits, which is also the spec's
+ * a11y contract (reservePx never covers the rail).
+ */
+@media (max-width: 1100px) {
+    .stage {
+        grid-template-rows: minmax(0, 1fr) auto;
+    }
+
+    .lensrail {
+        grid-row: 2;
+    }
+}
+
+/* No inline padding: the chip row is a scroller and owns its own gutter, so a chip scrolled to the
+   start reaches the frame edge instead of being sheared flat against an inset the rail imposed. */
+.lensrail {
+    border-block-start: 1px solid var(--md-hair);
+    background: var(--md-paper-2);
+    padding: var(--md-space-2) 0 max(var(--md-space-2), env(safe-area-inset-bottom));
+}
+
+/* The rail says what it is once, quietly: a row of dyed pills with no caption reads as filters
+   that need applying, and the map is already following every tap. */
+.lensrail-hint {
+    margin: 0 0 var(--md-space-2);
+    padding-inline: var(--md-space-4);
+    color: var(--md-ink-2);
+    font-size: var(--md-type-min);
+    letter-spacing: 0.1em;
+}
+
+/* 44px tall for a 38px chip: the row scrolls, so `overflow-x: auto` makes the cross axis a
+   clipping context too, and the chip's overflowing touch target would be cut to the painted pill. */
+/* A landscape phone has 390px of height to spend; the caption costs 27px of it and the chips say
+   what they are on their own once the map has been tapped even once. */
+@media (height < 560px) {
+    .lensrail-hint {
+        display: none;
+    }
+}
+
+.lensrail-chips {
+    display: flex;
+    align-items: center;
+    block-size: 44px;
+    gap: var(--md-space-2);
+    padding-inline: var(--md-space-3);
+    scroll-padding-inline: var(--md-space-3);
+    overflow-x: auto;
+    scrollbar-width: none;
+    /* The shear at the edge has to read as more-to-scroll, not as a chip with its border cut off. */
+    mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 var(--md-space-3),
+        #000 calc(100% - var(--md-space-3)),
+        transparent 100%
+    );
+}
+
+/*
+ * Centre the row once the chips no longer fill it: a tablet is wider than five chips. `safe`
+ * keeps the leftmost chip reachable when the row overflows anyway. Plain `center` clips both
+ * ends of an overflowing scroll container and the start of the row can never scroll into view.
+ */
+@media (min-width: 760px) {
+    .lensrail-chips {
+        justify-content: safe center;
+    }
+}
+
+/*
+ * 38px painted, 44px tapped: the same split the top bar makes. A rail of 44px pills under a 48px
+ * bar left the map two slabs of chrome to sit between, and the chip is a filter, not a key action.
+ */
+.lenschip {
+    position: relative;
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: var(--md-space-2);
+    block-size: 38px;
+    padding-inline: var(--md-space-3);
+    border: 1px solid var(--md-hair);
+    border-radius: 999px;
+    background: var(--md-paper);
+    color: var(--md-ink-2);
+    font-size: var(--md-type-min);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* The count rides the chip but is not the label: muted, at the floor, so the name wins the glance. */
+.lenschip-count {
+    color: var(--md-ink-2);
+    font-size: var(--md-type-min);
+}
+
+/* On reads as dye, not as a border: a ring alone at 12px lost the state against the rail's own
+   hairline, and the chip has to say what the map is doing without being read twice. */
+.lenschip[data-on] {
+    color: var(--md-ink);
+    border-color: var(--dye);
+    background: color-mix(in srgb, var(--dye) 14%, var(--md-paper));
+}
+
+.lenschip[data-on] .lenschip-count {
+    color: var(--md-ink);
+}
+
+.lenschip:focus-visible {
+    outline: 2px solid var(--md-red);
+    outline-offset: 2px;
+}
+
+.lenschip-more {
+    border-style: dashed;
+}
+
+/*
+ * A track, not a checkbox: in the sheet the switches are the whole page, so the state has to carry
+ * at arm's length. The input keeps checkbox semantics; `order` moves the track to the row's end.
+ */
+.layers-sheet .switch {
+    justify-content: space-between;
+    gap: var(--md-space-3);
+}
+
+.layers-sheet .switch-label {
+    flex: 1;
+}
+
+.layers-sheet .switch input {
+    order: 3;
+    inline-size: 44px;
+    block-size: 26px;
+    border: 1px solid var(--md-hair);
+    border-radius: 999px;
+    background: var(--md-paper);
+    transition: background var(--md-cameraMs) ease;
+}
+
+.layers-sheet .switch input::after {
+    content: "";
+    display: block;
+    inline-size: 18px;
+    block-size: 18px;
+    margin: 3px;
+    border-radius: 50%;
+    background: var(--md-hair);
+    transition: transform var(--md-cameraMs) ease;
+}
+
+.layers-sheet .switch input:checked {
+    border-color: var(--dye, var(--md-ink));
+    background: var(--dye, var(--md-ink));
+    box-shadow: none;
+}
+
+.layers-sheet .switch input:checked::after {
+    background: var(--md-paper);
+    transform: translateX(18px);
+}
+
+/* The knob's travel is state, not arrival: it snaps for a visitor who asked for no motion. */
+@media (prefers-reduced-motion: reduce) {
+    .layers-sheet .switch input,
+    .layers-sheet .switch input::after {
+        transition: none;
     }
 }
