@@ -1,0 +1,178 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    color-scheme: light dark;
+}
+
+/* A palette the visitor chose has to reach the browser's own furniture too: scrollbars, form
+   controls and the canvas behind the page still follow color-scheme, not our tokens. */
+:root[data-theme="light"] {
+    color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+body {
+    margin: 0;
+    background: var(--md-paper);
+    color: var(--md-ink);
+    font-family: var(--md-prose-family);
+    font-size: var(--md-prose-size);
+    font-weight: var(--md-prose-weight);
+    -webkit-font-smoothing: antialiased;
+}
+
+/** Width axis carries the fit, so a long name compresses into its plate instead of the plate growing. */
+.sign {
+    font-family: var(--md-masthead-family);
+    text-transform: uppercase;
+    font-variation-settings: "wdth" 100;
+}
+
+.tabular {
+    font-variant-numeric: tabular-nums;
+}
+
+.map-label {
+    font-family: var(--md-map-label-family);
+    font-size: var(--md-map-label-size);
+    font-weight: var(--md-map-label-weight);
+    letter-spacing: var(--md-map-label-tracking);
+}
+
+.map-numeral {
+    font-family: var(--md-map-numeral-family);
+    font-size: var(--md-map-numeral-size);
+    font-weight: var(--md-map-numeral-weight);
+    font-variation-settings: "wdth" var(--md-map-numeral-wdth);
+    font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+.page {
+    padding: clamp(var(--md-space-4), 4vw, var(--md-space-7));
+    display: grid;
+    gap: var(--md-space-5);
+}
+
+.masthead {
+    font-family: var(--md-masthead-family);
+    font-size: var(--md-masthead-size);
+    font-weight: var(--md-masthead-weight);
+    line-height: 0.95;
+    margin: 0;
+}
+
+.subtitle {
+    font-family: var(--md-line-label-family);
+    font-size: var(--md-line-label-size);
+    color: var(--md-ink-2);
+    margin: var(--md-space-1) 0 0;
+}
+
+.plan {
+    width: 100%;
+    height: auto;
+    max-height: var(--md-maxPlan);
+}
+
+.facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--md-space-6);
+    margin: 0;
+}
+
+.fact-label {
+    font-family: var(--md-line-label-family);
+    font-size: var(--md-type-min);
+    color: var(--md-ink-2);
+    letter-spacing: 0.06em;
+}
+
+.fact-value {
+    font-family: var(--md-masthead-family);
+    font-size: var(--md-space-7);
+    margin: 0;
+}
+
+.specimen {
+    padding: var(--md-space-6);
+    display: grid;
+    gap: var(--md-space-6);
+}
+
+.specimen-note {
+    max-width: 62ch;
+    color: var(--md-ink-2);
+    margin: var(--md-space-2) 0 0;
+}
+
+.specimen-section {
+    display: grid;
+    gap: var(--md-space-3);
+}
+
+.specimen-heading {
+    font-family: var(--md-line-label-family);
+    font-size: var(--md-board-cell-size);
+    letter-spacing: 0.08em;
+    margin: 0;
+}
+
+.specimen-ground {
+    padding: var(--md-space-5);
+    display: grid;
+    gap: var(--md-space-3);
+}
+
+.specimen-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--md-space-3);
+    align-items: center;
+}
+
+.specimen-size {
+    min-width: 68px;
+    opacity: 0.65;
+    font-size: var(--md-type-min);
+}
+
+.specimen-sample {
+    display: inline-flex;
+    gap: var(--md-space-1);
+    align-items: baseline;
+}
+
+.specimen-sample.is-plated {
+    background: var(--md-paper);
+    color: var(--md-ink);
+    padding: 2px var(--md-space-2);
+    border-radius: 3px;
+}
+
+.specimen-rule {
+    border: 0;
+    border-top: 1px dashed currentcolor;
+    opacity: 0.4;
+    margin: 0;
+}
+
+.error {
+    padding: var(--md-space-5);
+}

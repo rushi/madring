@@ -1,0 +1,528 @@
+.shell {
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    background: var(--md-paper);
+    overflow: hidden;
+}
+
+/*
+ * One row, three columns: who this is, what it says, what you can change. The standfirst sits
+ * beside the wordmark rather than on a row of its own, which reads in space the masthead already
+ * had and leaves the stage 88px of height it would otherwise lose.
+ */
+.masthead-bar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--md-space-4) var(--md-space-6);
+    padding: var(--md-space-4) var(--md-space-6);
+}
+
+.masthead-name {
+    display: flex;
+    flex-direction: column;
+    gap: var(--md-space-1);
+}
+
+.masthead-bar .masthead {
+    font-size: clamp(32px, 5vw, var(--md-masthead-size));
+}
+
+/*
+ * Sits under the wordmark as its subtitle, so the paragraph's own default margin has to go: it was
+ * pushing 15px between the two and breaking them into separate things.
+ */
+.site-question {
+    margin: 0;
+    font-family: var(--md-line-label-family);
+    font-size: var(--md-map-section-size);
+    font-variation-settings: "wdth" var(--md-map-section-wdth);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--md-ink-2);
+}
+
+.site-headline {
+    max-inline-size: 84ch;
+    margin: 0;
+    padding: 0;
+    font-size: var(--md-prose-size);
+    line-height: 1.45;
+    color: var(--md-ink-2);
+    text-wrap: pretty;
+}
+
+.map-frame {
+    position: relative;
+    min-height: 0;
+}
+
+/*
+ * The first frame as index.html carries it, drawn before the module bundle and the data behind it
+ * have landed. It is fixed over the page rather than in the layout because React owns every element
+ * inside #root and clears them on its first render, which happens while the bundle is still in
+ * flight. It repeats the real shell's elements and classes, so the measured page lands on top of it
+ * rather than beside it, and App removes it once that page is on screen. Left in the document it
+ * would be a second copy of every word in the masthead for anything reading the markup rather than
+ * the paint, such as a crawler or view-source.
+ */
+#lap-seed {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+
+/*
+ * Below the wide breakpoint the real panel is a drawer over the map and the stage is one column, so
+ * the stand-in's placeholder column goes. In CSS rather than in the seed's own script: changing the
+ * column count from script shifts a stage the browser has already laid out and painted.
+ */
+@media (max-width: 1100px) {
+    #lap-seed .panel {
+        display: none;
+    }
+}
+
+/*
+ * Absolute so the SVG's intrinsic aspect never stretches the row that contains it.
+ * Overflow visible because plates hold a fixed pixel size, so one near the edge of the
+ * lap reaches past the viewBox that frames the geometry.
+ */
+.map {
+    overflow: visible;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/*
+ * The lap is a road: a light edge line with the asphalt laid over it, one path stroked twice.
+ * A highlight is the same trick on one stretch, so a dyed run always sits exactly on the track.
+ */
+.track-edge {
+    fill: none;
+    stroke: var(--md-edge);
+    stroke-width: 20;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.track-asphalt {
+    fill: none;
+    stroke: var(--md-asphalt);
+    stroke-width: 13;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.run-edge {
+    fill: none;
+    stroke-width: 20;
+    stroke-opacity: 0.95;
+    stroke-linecap: butt;
+}
+
+.run-asphalt {
+    fill: none;
+    stroke: var(--md-asphalt);
+    stroke-width: 13;
+    stroke-linecap: butt;
+}
+
+.run-texture {
+    fill: none;
+    stroke-width: 13;
+    stroke-linecap: butt;
+}
+
+/*
+ * The only soft edge on the surface. It says "near here", where the kerb says "exactly here".
+ * Butt caps because runs abut: T17's braking zone ends on the exact t its hazard begins, and two
+ * round caps there spill past the join and composite green over red into mud.
+ */
+.run-glow {
+    fill: none;
+    stroke-width: 40;
+    stroke-opacity: 0.3;
+    stroke-linecap: butt;
+}
+
+.grid-dots {
+    fill: none;
+    stroke: var(--md-ink-2);
+    stroke-opacity: 0.28;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+}
+
+.pit-lane {
+    fill: none;
+    stroke: var(--md-pit);
+    stroke-width: 5;
+    stroke-opacity: 0.9;
+    stroke-dasharray: 14 10;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.pit-building {
+    fill: var(--md-paper-2);
+    stroke: var(--md-pit);
+    stroke-width: 2.5;
+}
+
+.pit-block {
+    fill: var(--md-paper-2);
+    fill-opacity: 0.6;
+    stroke: var(--md-ink-2);
+    stroke-width: 1.5;
+    stroke-dasharray: 6 5;
+}
+
+.pit-building-label,
+.pit-block-label,
+.pit-block-note {
+    text-anchor: middle;
+    font-family: var(--md-map-scenery-family);
+    font-weight: var(--md-map-scenery-weight);
+    font-variation-settings: "wdth" var(--md-map-scenery-wdth);
+    letter-spacing: var(--md-map-scenery-tracking);
+}
+
+.pit-building-label {
+    fill: var(--md-pit);
+}
+
+.pit-block-label {
+    fill: var(--md-ink);
+}
+
+.pit-block-note {
+    fill: var(--md-ink-2);
+}
+
+.pit-gate {
+    fill: var(--md-pit);
+}
+
+.tunnel-gate {
+    fill: var(--md-paper);
+    fill-opacity: 0.72;
+    stroke: var(--md-tunnel);
+    stroke-width: 3;
+    stroke-dasharray: 5 4;
+}
+
+.chequer {
+    fill: var(--md-ink);
+    stroke: var(--md-paper);
+    stroke-width: 2;
+}
+
+/*
+ * Which way the cars go. Drawn twice: a dark backing, then the mark itself, because a single pass
+ * in one colour vanished into the asphalt it sits on.
+ */
+.chevron {
+    fill: none;
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.chevron-back {
+    stroke: var(--md-asphalt);
+    stroke-width: 6;
+    stroke-opacity: 0.9;
+}
+
+.chevron-mark {
+    stroke: var(--md-edge);
+}
+
+/*
+ * Rule 4 again: a name standing on the drawing gets paper under it. On a compact map the leash is
+ * short enough to land START / FINISH on the asphalt and PIT IN across the lane's dashes, where
+ * bare 12 px type is unreadable. The solver already reserves this box, so nothing moves.
+ */
+.scenery-label rect {
+    fill: var(--md-paper);
+    stroke: var(--md-hair);
+    stroke-width: 1;
+}
+
+.pit-gate,
+.tunnel-label,
+.startfinish-label,
+.straight-label {
+    text-anchor: middle;
+    font-size: var(--md-map-scenery-size);
+    font-family: var(--md-map-scenery-family);
+    font-weight: var(--md-map-scenery-weight);
+    font-variation-settings: "wdth" var(--md-map-scenery-wdth);
+    letter-spacing: var(--md-map-scenery-tracking);
+}
+
+.tunnel-label {
+    fill: var(--md-tunnel);
+}
+
+.startfinish-label,
+.straight-label {
+    fill: var(--md-ink-2);
+}
+
+.section-label {
+    fill: var(--md-ink-2);
+    fill-opacity: 0.7;
+    text-anchor: middle;
+    font-size: var(--md-map-section-size);
+    font-family: var(--md-map-section-family);
+    font-weight: var(--md-map-section-weight);
+    font-variation-settings: "wdth" var(--md-map-section-wdth);
+    letter-spacing: var(--md-map-section-tracking);
+}
+
+/* `--dye` is set on a tick only while a lit highlight claims that corner. Unclaimed falls back. */
+.tick {
+    --mark: var(--dye, var(--md-hair));
+}
+
+.tick-stem {
+    stroke: var(--md-hair);
+    stroke-width: 1.5;
+    stroke-opacity: 0.6;
+}
+
+.tick-badge {
+    cursor: pointer;
+}
+
+/*
+ * The ring is stroked, not filled, so a corner claimed by more than one highlight can split it
+ * into an arc each. T17 is both an overtaking zone and a crash-prone corner; a single-colour ring
+ * had to drop one of those, and dropping it silently is the one thing a key must never do.
+ */
+.badge-ring {
+    fill: none;
+    stroke: var(--mark);
+}
+
+.badge-face {
+    fill: var(--md-badge-face);
+    stroke: var(--md-paper);
+    stroke-width: 2;
+}
+
+.badge-numeral {
+    fill: var(--md-badge-ink);
+    text-anchor: middle;
+    font-size: var(--md-map-numeral-size);
+    font-weight: var(--md-map-numeral-weight);
+    font-variation-settings: "wdth" var(--md-map-numeral-wdth);
+    font-variant-numeric: tabular-nums;
+    font-family: var(--md-map-numeral-family);
+}
+
+/* Which way the corner goes, riding the badge's shoulder rather than standing beside it. */
+.badge-tag circle {
+    fill: var(--md-hair);
+    stroke: var(--md-paper);
+    stroke-width: 1.5;
+}
+
+.badge-tag text {
+    fill: var(--md-badge-ink);
+    text-anchor: middle;
+    font-size: var(--md-type-min);
+    font-weight: 700;
+    font-family: var(--md-map-numeral-family);
+}
+
+/*
+ * The target a cut badge leaves at its corner. Invisible by default so the map reads as drawn, and
+ * it answers to focus and to touch so the corner is never unreachable.
+ */
+.tick-hit {
+    fill: transparent;
+    cursor: pointer;
+}
+
+.tick-hit:focus {
+    outline: none;
+}
+
+.tick-hit:focus-visible {
+    fill: color-mix(in srgb, var(--md-ink) 18%, transparent);
+    stroke: var(--md-ink);
+    stroke-width: 2;
+}
+
+/* The compact badge is smaller, so its numeral sits on the 12 px floor rather than above it. */
+.tick[data-compact="true"] .badge-numeral {
+    font-size: var(--md-type-min);
+}
+
+.tick-badge:focus,
+.tick-badge:focus-visible {
+    outline: none;
+}
+
+/*
+ * Selection inverts the badge rather than dyeing it. Red is the crash-prone livery, so a red
+ * numeral reads as a corner with something wrong with it. An inversion borrows no hue, so it can
+ * never collide with whatever a layer is saying.
+ */
+.tick-badge:focus-visible .badge-ring,
+.tick.is-selected .badge-ring {
+    stroke: var(--md-ink);
+}
+
+.tick.is-selected .badge-face {
+    fill: var(--md-paper);
+    stroke: var(--md-ink);
+    stroke-width: 3;
+}
+
+.tick.is-selected .badge-numeral {
+    fill: var(--md-ink);
+}
+
+/*
+ * The rest of the selected corner's named sequence. Marked on the face rather than the ring,
+ * because the ring is already spoken for by whichever highlights claim the corner. Quieter than
+ * the selection itself: these corners share a name with what you picked, they are not what you picked.
+ */
+.tick.is-kin .badge-face {
+    stroke: var(--md-ink);
+    stroke-width: 2.5;
+}
+
+/*
+ * The corner's own caption, raised over its badge while the pointer rests there. It takes no
+ * pointer events of its own: catching them would move the pointer off the badge and flicker the
+ * plate it is attached to.
+ */
+.turn-tip {
+    pointer-events: none;
+}
+
+.turn-tip rect {
+    fill: var(--md-paper);
+    stroke: var(--md-ink);
+    stroke-width: 1.5;
+}
+
+.turn-tip text {
+    fill: var(--md-ink);
+    text-anchor: middle;
+}
+
+.turn-tip-detail {
+    fill: var(--md-ink-2);
+    font-variant-numeric: tabular-nums;
+    font-family: var(--md-map-label-family);
+    font-weight: var(--md-map-label-weight);
+}
+
+/* Nothing hovers on a touch screen: the tap opens the corner outright, and the plate would stick. */
+@media (hover: none) {
+    .turn-tip {
+        display: none;
+    }
+}
+
+/* Rule 4: every map label sits on opaque paper, and holds 12px whatever the viewport does. */
+.tick-note rect {
+    fill: var(--md-paper);
+    stroke: var(--md-hair);
+    stroke-width: 1;
+}
+
+.tick-note text {
+    fill: var(--md-ink-2);
+    text-anchor: middle;
+    font-variant-numeric: tabular-nums;
+    font-family: var(--md-map-label-family);
+    font-weight: var(--md-map-label-weight);
+}
+
+@media (max-width: 1100px) {
+    /*
+     * Too narrow for three columns: the standfirst drops to its own row under the name. The rows
+     * are placed by hand because auto-placement pushed the controls below the standfirst, which
+     * left them stranded mid-page instead of beside the name they belong with.
+     */
+    .masthead-bar {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .masthead-name {
+        grid-area: 1 / 1;
+    }
+
+    .masthead-controls {
+        grid-area: 1 / 2;
+    }
+
+    .site-headline {
+        grid-area: 2 / 1 / 3 / -1;
+        max-inline-size: 70ch;
+    }
+}
+
+/* Landscape on a phone: 390px of height, and the masthead was taking half of it. */
+@media (max-height: 520px) {
+    .site-headline {
+        display: none;
+    }
+
+    .masthead-bar {
+        padding-block: var(--md-space-2);
+        gap: var(--md-space-2) var(--md-space-4);
+    }
+
+    .masthead-bar .masthead {
+        font-size: 26px;
+    }
+
+    .site-question {
+        display: none;
+    }
+}
+
+@media (max-width: 760px) {
+    /* One column: at 375px the wordmark and the controls cannot share a row without colliding. */
+    .masthead-bar {
+        grid-template-columns: minmax(0, 1fr);
+        padding-inline: var(--md-space-4);
+        padding-block: var(--md-space-3) var(--md-space-2);
+    }
+
+    .masthead-name,
+    .masthead-controls,
+    .site-headline {
+        grid-area: auto;
+    }
+
+    /* The standfirst is the first thing to go: the lap is what a cold visitor came for. */
+    .site-headline {
+        font-size: var(--md-map-label-size);
+        line-height: 1.4;
+    }
+
+    /* Three groups of controls wrapped to a second row here, and a phone's masthead is charged
+       against the map. Tighter buttons hold them on one line without touching the tap target. */
+    .masthead-controls {
+        justify-content: flex-start;
+        gap: var(--md-space-2);
+    }
+
+    .masthead-controls .unit,
+    .masthead-controls .panel-toggle {
+        padding-inline: var(--md-space-2);
+    }
+}
