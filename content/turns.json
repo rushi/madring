@@ -298,7 +298,7 @@
       "y": 255.8,
       "label": {
         "dx": 0,
-        "dy": -46,
+        "dy": 46,
         "anchor": "middle"
       },
       "speed": {
