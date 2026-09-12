@@ -22,7 +22,11 @@ function trackSeed(): Plugin {
                 const preload = `<link rel="preload" href="${ctx.server ? "/" : base}data/circuit.v1.json?v=${buildId}" as="fetch" crossorigin />`;
                 /* Both are replacement strings, where a $ in the copy would be read as a capture reference. */
                 const markup = seedMarkup(bundle, ctx.server ? "/" : base);
-                const seeded = html.replace(SEED_MARKER, () => markup).replace(DATA_MARKER, () => preload);
+                const analytics = ctx.server ? "" : ANALYTICS_TAG;
+                const seeded = html
+                    .replace(SEED_MARKER, () => markup)
+                    .replace(DATA_MARKER, () => preload)
+                    .replace(ANALYTICS_MARKER, () => analytics);
 
                 return ctx.bundle ? inlineStyles(seeded, ctx.bundle) : seeded;
             },
@@ -71,6 +75,19 @@ const SEED_MARKER = "<!--lap-seed-->";
 /* The bundle is fetched by the module that draws the map, so without this the browser learns it
    exists only once 80 KB of JavaScript has parsed and run. Named here, it rides down beside it. */
 const DATA_MARKER = "<!--data-preload-->";
+/* Only from a built site: a dev server would report localhost traffic against the same property.
+   The measurement id names the property, not a visitor, and ships in the page anyway. */
+const ANALYTICS_MARKER = "<!--analytics-->";
+const ANALYTICS_ID = "G-M7JDK2XWZ7";
+const ANALYTICS_TAG = [
+    `<script async src="https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_ID}"></script>`,
+    `<script>`,
+    `window.dataLayer = window.dataLayer || [];`,
+    `function gtag(){dataLayer.push(arguments);}`,
+    `gtag('js', new Date());`,
+    `gtag('config', '${ANALYTICS_ID}');`,
+    `</script>`,
+].join("");
 
 export default defineConfig({
     base,
