@@ -1,0 +1,251 @@
+.stage {
+    min-height: 0;
+    height: 100%;
+    display: grid;
+    grid-template-columns: var(--md-panelPx) minmax(0, 1fr);
+    gap: var(--md-space-5);
+    padding-inline: var(--md-space-6);
+    transition: grid-template-columns var(--md-cameraMs) ease;
+}
+
+/* Collapsed, the stage is one column and the whole width belongs to the drawing. */
+.stage[data-panel="closed"] {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+}
+
+/* The corner opens at the top of the panel, where the eye already is after clicking a plate. */
+.detail {
+    background: var(--md-paper-2);
+    border: 1px solid var(--md-hair);
+    padding: var(--md-space-4);
+}
+
+.detail:focus {
+    outline: none;
+}
+
+/*
+ * The number and the close button share the top line; the name takes the whole next one. Sharing
+ * a line with them left the name about 95px to live in, too narrow for a word like ENLAZADAS, and
+ * it broke mid-word. Given the panel's full width it wraps where the language allows.
+ */
+.detail-head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+        "number . close"
+        "title title title";
+    gap: var(--md-space-2) var(--md-space-3);
+    align-items: start;
+}
+
+.detail-title {
+    grid-area: title;
+}
+
+.detail-number {
+    grid-area: number;
+    margin: 0;
+    padding: 2px var(--md-space-2);
+    background: var(--md-ink);
+    color: var(--md-paper);
+    font-size: var(--md-line-label-size);
+}
+
+.detail-name {
+    margin: 0;
+    font-size: var(--md-line-label-size);
+    line-height: 1.15;
+    overflow-wrap: break-word;
+    text-wrap: balance;
+}
+
+.detail-dir {
+    margin: 2px 0 0;
+    color: var(--md-ink-2);
+    font-size: var(--md-map-label-size);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.detail-close {
+    grid-area: close;
+    background: none;
+    border: 1px solid var(--md-hair);
+    color: var(--md-ink);
+    cursor: pointer;
+    padding: 2px var(--md-space-2);
+}
+
+/* One column until there is room for two: a figure and its unit will not share half this panel. */
+.detail-figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--md-space-3);
+    margin: var(--md-space-4) 0 0;
+}
+
+.figure dt {
+    font-size: var(--md-type-min);
+    color: var(--md-ink-2);
+    letter-spacing: 0.06em;
+}
+
+.figure dd {
+    margin: 2px 0 0;
+    font-size: var(--md-board-cell-size);
+}
+
+.figure-unit {
+    color: var(--md-ink-2);
+}
+
+.detail-note {
+    margin: var(--md-space-4) 0 0;
+    line-height: 1.5;
+}
+
+.detail-dispute,
+.detail-drivers {
+    margin: var(--md-space-3) 0 0;
+    color: var(--md-ink-2);
+    font-size: var(--md-map-label-size);
+}
+
+.detail-drivers {
+    padding-inline-start: var(--md-space-4);
+}
+
+/* Sits inside `.masthead-controls`, which does the spacing; an auto margin here would split the pair. */
+.units {
+    display: flex;
+    gap: 0;
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.unit {
+    padding: var(--md-space-1) var(--md-space-3);
+    border: 1.5px solid var(--md-hair);
+    background: transparent;
+    color: var(--md-ink-2);
+    cursor: pointer;
+    font-size: var(--md-type-min);
+    letter-spacing: 0.06em;
+}
+
+.unit + .unit {
+    border-inline-start: 0;
+}
+
+.unit.is-active {
+    background: var(--md-ink);
+    border-color: var(--md-ink);
+    color: var(--md-paper);
+}
+
+.provenance {
+    font-size: var(--md-map-label-size);
+    color: var(--md-ink-2);
+    line-height: 1.5;
+}
+
+.provenance summary {
+    cursor: pointer;
+    letter-spacing: 0.06em;
+}
+
+.provenance ul {
+    padding-inline-start: var(--md-space-4);
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/*
+ * Below the wide breakpoint the stage stops being two columns. The map takes the whole of it and
+ * the panel slides over the top, because stacking the panel above the map put fifteen switches and
+ * a key ahead of the drawing on a phone, and principle 5 says the map is legible before it is
+ * interactive. The drawer arrives closed; the masthead toggle is what opens it.
+ */
+@media (max-width: 1100px) {
+    .shell {
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    .stage {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+        padding-inline: var(--md-space-4);
+    }
+
+    .stage[data-panel="open"] {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .map-frame {
+        grid-area: 1 / 1;
+    }
+
+    /*
+     * A sheet on the bottom edge, where a thumb is. It sits above the drawer so a corner picked
+     * with the layers open is still readable, and stops short of the full height so the map it
+     * describes stays in view behind it.
+     */
+    .detail-sheet {
+        grid-area: 1 / 1;
+        position: relative;
+        z-index: 4;
+        align-self: end;
+        inline-size: 100%;
+        max-block-size: 62%;
+        overflow-y: auto;
+        margin-inline: calc(var(--md-space-4) * -1);
+        padding: 0 var(--md-space-4) max(var(--md-space-4), env(safe-area-inset-bottom));
+        animation: sheet-in var(--md-cameraMs) ease;
+    }
+
+    .detail-sheet .detail {
+        box-shadow: 0 -18px 40px rgb(0 0 0 / 45%);
+    }
+
+    @keyframes sheet-in {
+        from {
+            transform: translateY(12%);
+            opacity: 0;
+        }
+    }
+
+    .scrim {
+        grid-area: 1 / 1;
+        position: relative;
+        z-index: 2;
+        border: 0;
+        padding: 0;
+        margin: calc(var(--md-space-4) * -1);
+        background: color-mix(in srgb, var(--md-paper) 72%, transparent);
+        cursor: pointer;
+        animation: scrim-in var(--md-cameraMs) ease;
+    }
+
+    @keyframes scrim-in {
+        from {
+            opacity: 0;
+        }
+    }
+}
+
+@media (max-width: 760px) {
+    .stage {
+        padding-inline: var(--md-space-3);
+    }
+}
