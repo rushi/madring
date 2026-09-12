@@ -49,6 +49,8 @@
     "site.home": "Madring, back to the full lap",
     "rail.label": "Layers",
     "rail.hint": "Layers · map updates live",
+    "rail.chip": "{label}, {count} corners",
+    "rail.chipOne": "{label}, one corner",
     "rail.more": "Labels & scenery",
     "detail.tags": "Layers this corner is in",
     "menu.label": "Menu",

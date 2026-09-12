@@ -19,7 +19,7 @@ import { TurnTip } from "./TurnTip.tsx";
 import type { Room } from "./TurnTip.tsx";
 
 export const CircuitMap = memo(function CircuitMap(props: Props) {
-    const { data, state, units, selected, kin, reservePx = 0, focusTurn, onSelect } = props;
+    const { data, state, units, selected, kin, minPan, reservePx = 0, focusTurn, onSelect } = props;
     const svg = useRef<SVGSVGElement>(null);
     /* Pointer state, not page state: it is never shared, never linked, and never survives a leave. */
     const [hovered, setHovered] = useState<number>();
@@ -50,7 +50,7 @@ export const CircuitMap = memo(function CircuitMap(props: Props) {
     const mapDeg = mapDegrees(upright);
 
     const focus = focusTurn !== undefined ? points.get(focusTurn) : undefined;
-    const framing = { cx, cy, box, bbox, scale, focus, mapDeg, upright, frameW, frameH, reservePx };
+    const framing = { cx, cy, box, bbox, scale, focus, mapDeg, upright, frameW, frameH, minPan, reservePx };
     const { x: ox, y: oy } = frameOrigin(framing);
     const viewBox = `${ox} ${oy} ${frameW} ${frameH}`;
 
@@ -193,7 +193,7 @@ const FOLD_MARGIN = LABEL_PX * 2;
  * keep placing for exactly what is on screen.
  */
 function frameOrigin(args: OriginArgs) {
-    const { box, scale, upright, mapDeg, frameW, frameH, cx, cy, bbox, focus, reservePx } = args;
+    const { box, scale, upright, mapDeg, frameW, frameH, cx, cy, bbox, focus, minPan, reservePx } = args;
     const ox = cx - frameW / 2;
     const oy = cy - frameH / 2;
     if (!focus || box.width <= 0 || reservePx <= 0) {
@@ -214,7 +214,10 @@ function frameOrigin(args: OriginArgs) {
     const lapBottom = upright ? cy + bbox.w / 2 : bbox.y + bbox.h;
     const min = lapTop - frameH * (1 - LAP_KEEP);
     const max = lapBottom - frameH * LAP_KEEP;
-    const y = Math.min(Math.max(at.y - (fold * FOLD_TARGET - lift) / scale, min), max);
+    /* A card that covers a band rather than the stage moves the lap the least it can: the corner
+       lands just clear of the card's top edge instead of under the middle of what is left. */
+    const target = minPan ? fold - FOLD_MARGIN : fold * FOLD_TARGET;
+    const y = Math.min(Math.max(at.y - (target - lift) / scale, min), max);
 
     return { x: ox, y };
 }
@@ -240,6 +243,7 @@ interface OriginArgs {
     frameH: number;
     bbox: { x: number; y: number; w: number; h: number };
     upright: boolean;
+    minPan?: boolean;
     reservePx: number;
     focus?: { x: number; y: number };
 }
@@ -251,6 +255,8 @@ interface Props {
     selected?: number;
     /** The other corners of the selected corner's named sequence. */
     kin: Set<number>;
+    /** Move only far enough to clear the reserve, for a card that covers a band and not the stage. */
+    minPan?: boolean;
     /** Screen px the sheet reserves at the frame's bottom edge. Zero keeps the lap centred. */
     reservePx?: number;
     /** The corner the sheet describes; the frame slides to keep it above the fold. */

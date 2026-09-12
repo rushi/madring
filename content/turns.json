@@ -429,7 +429,7 @@
         "dispute": null
       },
       "altitudeM": null,
-      "note": "{dist:550} of 24% banking (13.5°). Entry at {plain:180}–{speed:200}, ~{speed:300} at its fastest, about 6 seconds flat out.",
+      "note": "{dist:550} of 24% banking (13.5°). Entry at {bareSpeed:180}–{speed:200}, ~{speed:300} at its fastest, about 6 seconds flat out.",
       "quotes": [],
       "overtakingRank": null
     },

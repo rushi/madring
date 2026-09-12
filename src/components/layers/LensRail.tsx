@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { fieldAt } from "../../data/fields.ts";
+import { fill } from "../../data/fill.ts";
 import type { CircuitData, Layer, LayerState } from "../../data/types.ts";
 import { highlightLayers, shortLabel } from "../../layers/resolve.ts";
 import { dyeStyle } from "../map/place.ts";
@@ -21,13 +22,17 @@ export function LensRail({ data, state, onToggle, onMore }: Props) {
                 {layers.map((layer) => {
                     const on = !!state[layer.id];
                     const count = counts.get(layer.id);
+                    /* The chip shows the short name and a bare tally, so the full name and what the
+                       tally counts both belong to the accessible name instead. */
+                    const chipCopy = data.copy[count === 1 ? "rail.chipOne" : "rail.chip"] ?? "";
+                    const named = count === undefined ? layer.label : fill(chipCopy, { label: layer.label, count });
 
                     return (
                         <button
                             key={layer.id}
                             type="button"
                             aria-pressed={on}
-                            aria-label={layer.label}
+                            aria-label={named}
                             style={dyeStyle(layer.livery)}
                             data-on={on || undefined}
                             className="lenschip"

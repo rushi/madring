@@ -259,9 +259,9 @@ function OverlayShell(props: OverlayProps) {
     const walkTurn = useCircuitStore((state) => state.walkTurn);
 
     const showDock = !!detail && shortDock;
-    /* Only the full-width sheet covers enough of the lap to earn the pan: the dock takes its own
-       column and the tablet's card is 520px of a wider frame, so both leave the corner in view. */
-    const sheetPan = !!detail && !showDock && !floatCard;
+    /* The dock takes its own column, so the frame holds still for it. Both of the others overlay the
+       map and pan it, the full-width sheet to the fold and the tablet's card by the least it can. */
+    const panFrame = !!detail && !showDock;
 
     /* A sheet and the corner card both answer Escape; the sheet is on top, so it wins the key. */
     useEffect(() => {
@@ -295,7 +295,7 @@ function OverlayShell(props: OverlayProps) {
      */
     useLayoutEffect(() => {
         const sheetEl = sheetRef.current;
-        if (!sheetPan || !sheetEl) {
+        if (!panFrame || !sheetEl) {
             setSheetPx(0);
             return;
         }
@@ -307,7 +307,7 @@ function OverlayShell(props: OverlayProps) {
         const observer = new ResizeObserver(measure);
         observer.observe(sheetEl);
         return () => observer.disconnect();
-    }, [sheetPan]);
+    }, [panFrame]);
 
     return (
         <div className="shell">
@@ -327,8 +327,9 @@ function OverlayShell(props: OverlayProps) {
                         units={units}
                         selected={turn}
                         kin={kin}
-                        reservePx={sheetPan ? sheetPx : 0}
-                        focusTurn={sheetPan ? turn : undefined}
+                        minPan={floatCard}
+                        reservePx={panFrame ? sheetPx : 0}
+                        focusTurn={panFrame ? turn : undefined}
                         onSelect={onSelect}
                     />
                     {state.legend && <FloatingKey data={circuit} state={state} copy={circuit.copy} />}
