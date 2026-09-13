@@ -10,6 +10,7 @@
     },
     "scripts": {
         "ingest": "node scripts/ingest.ts",
+        "og": "node scripts/og.ts",
         "dev": "pnpm ingest && vite",
         "build": "pnpm ingest && tsc --noEmit && vite build",
         "preview": "vite preview",
